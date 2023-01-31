@@ -1,17 +1,25 @@
-const express = require('express');
-const cors = require('cors');
-
+import express from 'express';
+import cors from 'cors';
+import routes from './routes/index.js';
+import * as dotenv from 'dotenv';
+const port = 8080;
+/**
+ * Creating express server
+ */
 const app = express();
+dotenv.config();
 
-const index = require('./routes/index');
-// const productRoute = require('./routes/product.routes');
-
-app.use(express.urlencoded({ extended: true }));
+// Express Server Middlewares
 app.use(express.json());
-app.use(express.json({ type: 'application/vnd.api+json' }));
+app.use(express.urlencoded({
+    extended: true
+}));
 app.use(cors());
 
-app.use(index);
-// app.use('/api/', productRoute);
+// Custom routing
+routes(app);
 
-module.exports = app;
+// Enable Server to listen on port
+app.listen(port, () => {
+    console.log(`Server listening on port ${port}`);
+});

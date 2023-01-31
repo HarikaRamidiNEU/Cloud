@@ -1,15 +1,15 @@
-import * as userService from '../services/user/user-service';
-import { setResponse, setError } from '../utils/http-utils';
+import * as userService from '../services/user-service.js';
+import { setResponse, setError } from '../utils/http-utils.js';
 
 /**
  * It updates the user details and returns the updated object
  * @param req - Http Request with <IUser> as body
- * @param {CustomResponse} response - CustomResponse - This is the response object that will be sent
+ * @param response - CustomResponse - This is the response object that will be sent
  * back to the client.
  */
  export const updateProfile = async (req, response) => {
     try {
-        const userId = req.user.userId;
+        const userId = req.params.id;
         const user = await userService.updateUser(userId,req.body);
         setResponse(response, user);
     } catch (err) {
@@ -20,12 +20,12 @@ import { setResponse, setError } from '../utils/http-utils';
 /**
  * This is used to get the user details based on the access token
  * @param req - Http Request with <IUser> as body
- * @param {CustomResponse} response - CustomResponse - This is the response object that will be sent
+ * @param response - CustomResponse - This is the response object that will be sent
  * back to the client.
  */
 export const getUser = async(req, response) => {
     try {
-        const userId = req.user.userId;
+        const userId = req.params.id;
         const user = await userService.getUser(userId);
         setResponse(response, user);
     } catch (err) {
