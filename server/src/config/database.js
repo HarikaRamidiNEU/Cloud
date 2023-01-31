@@ -3,6 +3,9 @@ import pkg from 'pg';
 const { Pool } = pkg;
 dotenv.config();
 
+let mainPool = null;
+
+function createPool(){
 const pool = new Pool({
   user: process.env.DATABASE_USER,
   host: process.env.DATABASE_HOST,
@@ -10,9 +13,14 @@ const pool = new Pool({
   password: process.env.DATABASE_Password,
   port: process.env.DATABASE_PORT,
 });
+ return pool;
+}
 
-pool.on('connect', () => {
-  console.log('Connected to Database successfully!');
-});
+function getPool(){
+  if(!mainPool){
+    mainPool = createPool();
+  }
+  return mainPool;
+}
 
-export default pool;
+export default getPool();

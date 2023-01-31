@@ -26,9 +26,7 @@ export const login = async (req, response) => {
  */
  export const createUser = async(req, response) => {
     try {
-        console.log("In auth controller")
         const user = await authService.createUser(req, response);
-        setResponse(response, user);
     } catch (err) {
         setError(response, err);
     }
