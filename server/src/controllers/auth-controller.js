@@ -1,4 +1,5 @@
-import * as authService from "../services/auth/auth-service";
+import * as authService from "../services/auth-service.js";
+import { setResponse, setError } from "../utils/http-utils.js";
 
 /**
  * It logsIn a user and returns the accesstoken in the response
@@ -16,4 +17,19 @@ export const login = async (req, response) => {
       else setError(response, err, 500);
     }
   };
-  
+
+/**
+ * This is used to get the user details based on the access token
+ * @param req - Http Request with <IUser> as body
+ * @param response - CustomResponse - This is the response object that will be sent
+ * back to the client.
+ */
+ export const createUser = async(req, response) => {
+    try {
+        console.log("In auth controller")
+        const user = await authService.createUser(req, response);
+        setResponse(response, user);
+    } catch (err) {
+        setError(response, err);
+    }
+}
