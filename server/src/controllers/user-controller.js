@@ -9,9 +9,7 @@ import { setResponse, setError } from '../utils/http-utils.js';
  */
  export const updateProfile = async (req, response) => {
     try {
-        const userId = req.params.id;
-        const user = await userService.updateUser(userId,req.body);
-        setResponse(response, user);
+        await userService.updateUser(req, response);
     } catch (err) {
         setError(response, err);
     }
@@ -25,9 +23,7 @@ import { setResponse, setError } from '../utils/http-utils.js';
  */
 export const getUser = async(req, response) => {
     try {
-        const userId = req.params.id;
-        const user = await userService.getUser(userId);
-        setResponse(response, user);
+        await userService.getUser(req, response);
     } catch (err) {
         setError(response, err);
     }

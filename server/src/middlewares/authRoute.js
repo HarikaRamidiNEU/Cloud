@@ -6,17 +6,13 @@ import { validateAccessToken } from "../utils/token.js";
  * @param res Response.
  * @param next Next middleware to be executed.
  */
-export const authRoute = (req, res, next) => {
+export const authRoute = (req, res) => {
   const authHeader = req.headers.authorization;
   const userId = req.params.id;
-  const token = authHeader && authHeader.split(" ")[1];
-
+  const token = authHeader;
   if (token == null) return res.sendStatus(401);
 
-  if(validateAccessToken(authHeader, userId)) {
-    req.user = user;
-    next();
-  }
-  else
+  if(!validateAccessToken(authHeader, userId)) {
     return res.sendStatus(403);
+  }
 };

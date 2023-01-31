@@ -4,9 +4,15 @@ import express from 'express';
 const router = express.Router();
 
 // getUser Route
-router.route('/user/getUser/:id').get(authRoute, userController.getUser);
+router.get('/v1/user/:id', (req, res)=> {
+    authRoute(req, res);
+    userController.getUser(req, res);
+});
 
 // UpdateProfile Route
-router.route('/user/updateProfile/:id').post(authRoute,userController.updateProfile);
+router.put('/v1/user/:id', (req, res)=> {
+    authRoute(req, res);
+    userController.updateProfile(req, res);
+});
 
 export default router;

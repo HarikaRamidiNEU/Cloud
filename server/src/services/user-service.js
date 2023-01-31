@@ -8,30 +8,45 @@ import pool from '../config/database.js';
 export const updateUser = async (req, res) => {
     const userId = req.params.id;
     const { first_name, last_name, password, username } = req.body;
-    pool.query(
-        "SELECT * from public.'Users' where username = $1",
-        [username],
-        async function (err, rows) {
-          if (err) throw err;
-          if (rows && rows.rowCount === 1) {
-            const hashedPassword = await hashPassword(password);
-            pool.query(
-                "UPDATE public.'Users' SET first_name = $1, last_name = $2, username = $3, password = $4 WHERE id = $5",
-                [first_name, last_name, username, password, userId], (error, results) => {
-                    if(error){
-                        return error;
-                    }
-                    res.status(204).json(results.rows);
+    if(first_name|| last_name || username || password){
+    let querytext = "UPDATE public.\"Users\" SET ";
+    let values = [];
+    let i=0;
+    if(first_name && first_name !== null){
+        querytext = querytext + "first_name = $"+(++i);
+        values.push(first_name);
+    }
+    if(last_name && last_name !== null){
+        querytext = querytext + ", last_name = $"+(++i);
+        values.push(last_name);
+    }
+    if(username && username !== null){
+        querytext = querytext + ", username = $"+(++i);
+        values.push(username);
+    }
+    if(password && password !== null){
+        querytext = querytext + ", password = $"+(++i);
+        const hashedPassword = await hashPassword(password);
+        values.push(hashedPassword);
+    } 
+    querytext = querytext + " WHERE id = $"+(++i);
+    values.push(userId);
+    await pool.query(
+        "SELECT * from public.\"Users\" where id = $1", [userId], async (err, results) => {
+          if (results && results.rowCount === 1) {
+            await pool.query(
+                querytext, values, (error, results) => {
+                    res.status(204).send({message: "User updated successfully"});
                 }
               );
           } else {
-            console.log("User doesn't exists in database");
             res.status(400).send({
-                message: "User doesn't exists in database"
+                message: "Bad request"
             });
           }
         }
       );
+    }
 };
 
 
@@ -41,12 +56,16 @@ export const updateUser = async (req, res) => {
  */
 export const getUser = async (req, res) => {
     const userId = req.params.id;
-    await pool.query(
-      "Select * from public.'Users' where id = $1",[userId], (error, results) => {
-        if (error) {
-            throw error
+    await pool.query("select * from public.\"Users\" where id = $1",[userId], (err, results) => {
+        const row = results.rows[0];
+        const user = {
+            id: row.id,
+            first_name: row.first_name,
+            last_name: row.last_name,
+            username: row.username,
+            account_created: row.account_created,
+            account_updated: row.account_updated
           }
-          res.status(200).json(results.rows)
-      }
-    );
+        res.status(200).json(user);
+    });
   };
