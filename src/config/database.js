@@ -1,26 +1,15 @@
 import dotenv  from "dotenv"
-import pkg from 'pg';
-const { Pool } = pkg;
+
 dotenv.config();
 
-let mainPool = null;
-
-function createPool(){
-const pool = new Pool({
-  user: process.env.DATABASE_USER,
-  host: process.env.DATABASE_HOST,
-  database: process.env.DATABASE_NAME,
-  password: process.env.DATABASE_Password,
-  port: process.env.DATABASE_PORT,
+import { Sequelize } from "sequelize";
+const sequelize = new Sequelize('postgres://'+process.env.DATABASE_USER+':'+process.env.DATABASE_Password+'@'+process.env.DATABASE_HOST+':'+process.env.DATABASE_PORT+'/'+process.env.DATABASE_NAME)
+sequelize.authenticate().then(() => {
+  console.log('Connection has been established successfully.');
+}).catch(err => {
+  console.error('Unable to connect to the database:', err);
 });
- return pool;
-}
 
-function getPool(){
-  if(!mainPool){
-    mainPool = createPool();
-  }
-  return mainPool;
-}
+export default sequelize;
 
-export default getPool();
+
