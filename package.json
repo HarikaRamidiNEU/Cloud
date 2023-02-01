@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node .",
-    "test": "mocha"
+    "test": "mocha --exit"
   },
   "keywords": [],
   "author": "",
