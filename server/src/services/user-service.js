@@ -7,8 +7,14 @@ import pool from '../config/database.js';
  */
 export const updateUser = async (req, res) => {
     const userId = req.params.id;
-    const { first_name, last_name, password, username } = req.body;
-    if(first_name|| last_name || username || password){
+    const { first_name, last_name, password, username, id, account_created, account_updated } = req.body;
+    if(username || id || account_created || account_updated){
+        res.status(400).send({
+            message: "Bad request"
+        });
+    }
+    else{
+    if(first_name|| last_name || password){
     let querytext = "UPDATE public.\"Users\" SET ";
     let values = [];
     let i=0;
@@ -19,10 +25,6 @@ export const updateUser = async (req, res) => {
     if(last_name && last_name !== null){
         querytext = querytext + ", last_name = $"+(++i);
         values.push(last_name);
-    }
-    if(username && username !== null){
-        querytext = querytext + ", username = $"+(++i);
-        values.push(username);
     }
     if(password && password !== null){
         querytext = querytext + ", password = $"+(++i);
@@ -47,6 +49,7 @@ export const updateUser = async (req, res) => {
         }
       );
     }
+}
 };
 
 

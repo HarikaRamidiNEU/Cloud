@@ -1,6 +1,8 @@
 import { generateAccessToken } from "../utils/token.js";
 import { hashPassword, comparePassword } from "../config/crypto.js";
 import pool from "../config/database.js";
+import { isValidEmail } from "../config/validators.js";
+
 /**
  * This method is used to generate the accesstoken for the valid users
  * @param signInUser - user object with username and password
@@ -23,6 +25,8 @@ import pool from "../config/database.js";
         first_name: user.first_name,
         last_name: user.last_name,
         username: user.username,
+        account_created: user.account_created,
+        account_updated: user.account_updated,
         accessToken: aToken,
       }
       return res;
@@ -36,9 +40,10 @@ import pool from "../config/database.js";
  */
  export const createUser = async (req, res) => {
     const { first_name, last_name, password, username } = req.body;
-    await pool.query(
-        "SELECT * from public.\"Users\" where username = $1",
-        [username],
+    if(!first_name || !last_name || !password || !username || !isValidEmail(username))
+        res.status(400).send({message: "Bad request"})
+    else
+        await pool.query( "SELECT * from public.\"Users\" where username = $1",[username],
         async function (err, rows) {
           if (err) throw err;
           if (rows && rows.rowCount === 0) {
@@ -48,11 +53,22 @@ import pool from "../config/database.js";
                 text: 'INSERT INTO public.\"Users\" (first_name, last_name, password, username ) VALUES ($1, $2, $3, $4)',
                 values: [first_name, last_name, hashedPassword, username]
           });
-            res.status(201).send({body: {token: generateAccessToken(username, password)}});
+          pool.query("SELECT * from public.\"Users\" where username = $1",[username], (err, results) => {
+            const row = results.rows[0];
+            const user = {
+                id: row.id,
+                first_name: row.first_name,
+                last_name: row.last_name,
+                username: row.username,
+                account_created: row.account_created,
+                account_updated: row.account_updated,
+                token: generateAccessToken(username, password)
+            }
+            res.status(201).send(user);
+          })
           } else {
-            res.status(400).send({message: "User already exists in database"})
+            res.status(400).send({message: "Bad Request, User already exists!"})
           }
         }
       );
 };
-
