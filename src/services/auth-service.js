@@ -47,6 +47,7 @@ import User from "../models/User.js";
       if(!user){
         console.log("There is no such user, adding now");
         const hashedPassword = await hashPassword(password);
+        req.body.password = hashedPassword;
         const row = await User.create(req.body);
         const user = {
                     id: row.id,
