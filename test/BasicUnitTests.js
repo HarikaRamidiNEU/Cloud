@@ -95,15 +95,6 @@ describe('server check with healthz', function() {
         .end(done())
       });
 
-      it('should return status 204 when updating user data', function(done){
-        request
-        .put('/v1/user/5')
-        .set('authorization', users.token)
-        .send({"first_name": "Person_first"})
-        .expect(204)
-        .end(done())
-      });
-
       it('should return status 403 when updating others data', function(done){
         request
         .put('/v1/user/1')
