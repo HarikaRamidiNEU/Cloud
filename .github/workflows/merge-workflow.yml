@@ -7,5 +7,7 @@ jobs:
   test-cases:
     runs-on: ubuntu-latest
     steps:
-      - name: first step
+      - name: change directory to server
+        run: cd server 
+      - name: run tests
         run: npm test
