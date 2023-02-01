@@ -16,9 +16,9 @@ export const validateAccessToken = async (token, userId) => {
     const username = plainCredential.split(":")[0];
     const results = await pool.query("Select id from public.\"Users\" where username = $1", [username]);
     const originalUserId = results.rows[0].id;
-    if(originalUserId && (userId === originalUserId))
-        return true;
-    else
-        return false;
+        if(originalUserId && (userId == originalUserId))
+            return true;
+        else
+            return false;
 }
 
