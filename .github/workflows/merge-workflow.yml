@@ -1,8 +1,8 @@
 name: Test Cases Workflow
 
 on: 
-  pull_request:
-    branches: [main]
+  push:
+    branches: [assignment1]
 jobs:
   test-cases:
     runs-on: ubuntu-latest
