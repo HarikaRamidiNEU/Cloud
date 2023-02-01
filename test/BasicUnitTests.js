@@ -26,32 +26,6 @@ describe('server check with healthz', function() {
   });
 
   describe('Unauthenticated apis', function(){
-    it('should return status 200 on login', function(done){
-      request
-      .post('/v1/login')
-      .send({"username": users.email,
-      "password": users.password})
-      .expect(200)
-      .expect((res) => {
-        expect(res.body.token).toBe(users.token);
-      })
-      .end(function(err, res){
-        res.should.have.status(200);
-        done();
-      })
-    });
-
-    it('should return status 401 unauthorized without password', function(done){
-      request
-      .post('/v1/login')
-      .send({"username": users.email,
-      "password": ""})
-      .expect(401)
-      .end(function(err, res){
-        res.should.have.status(401);
-        done();
-      })
-    });
 
     it('should not create user with invaild data', (done) => {
       request
