@@ -1,15 +1,15 @@
 import { generateAccessToken } from "../utils/token.js";
 import { hashPassword, comparePassword } from "../config/crypto.js";
-import pool from "../config/database.js";
+// import pool from "../config/database.js";
 import { isValidEmail } from "../config/validators.js";
+import User from "../models/User.js";
 
 /**
  * This method is used to generate the accesstoken for the valid users
  * @param signInUser - user object with username and password
  */
  export const loginUser = async (signInUser) => {
-    const results =  await pool.query("select * from public.\"Users\" where username=$1",[signInUser.username]);
-    const user = results.rows[0];
+    const user = await User.findOne({where: {username: signInUser.username}})
       if (!user) {
         throw new Error("User Not found");
       }
@@ -42,33 +42,24 @@ import { isValidEmail } from "../config/validators.js";
     const { first_name, last_name, password, username } = req.body;
     if(!first_name || !last_name || !password || !username || !isValidEmail(username))
         res.status(400).send({message: "Bad request"})
-    else
-        await pool.query( "SELECT * from public.\"Users\" where username = $1",[username],
-        async function (err, rows) {
-          if (err) throw err;
-          if (rows && rows.rowCount === 0) {
-            console.log("There is no such user, adding now");
-            const hashedPassword = await hashPassword(password);
-            pool.query({
-                text: 'INSERT INTO public.\"Users\" (first_name, last_name, password, username ) VALUES ($1, $2, $3, $4)',
-                values: [first_name, last_name, hashedPassword, username]
-          });
-          pool.query("SELECT * from public.\"Users\" where username = $1",[username], (err, results) => {
-            const row = results.rows[0];
-            const user = {
-                id: row.id,
-                first_name: row.first_name,
-                last_name: row.last_name,
-                username: row.username,
-                account_created: row.account_created,
-                account_updated: row.account_updated,
-                token: generateAccessToken(username, password)
-            }
-            res.status(201).send(user);
-          })
-          } else {
-            res.status(400).send({message: "Bad Request, User already exists!"})
-          }
-        }
-      );
+    else{
+      const user = await User.findOne({where: {username: username}})
+      if(!user){
+        console.log("There is no such user, adding now");
+        const hashedPassword = await hashPassword(password);
+        const row = await User.create(req.body);
+        const user = {
+                    id: row.id,
+                    first_name: row.first_name,
+                    last_name: row.last_name,
+                    username: row.username,
+                    account_created: row.account_created,
+                    account_updated: row.account_updated,
+                    token: generateAccessToken(username, password)
+                }
+                res.status(201).send(user);
+              } else {
+                res.status(400).send({message: "Bad Request, User already exists!"})
+              }
+    }
 };
