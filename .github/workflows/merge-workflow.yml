@@ -1,8 +1,6 @@
 name: Test Cases Workflow
 
 on: 
-  push:
-    branches: [assignment1]
   pull_request:
     branches: [ main ]
 jobs:
