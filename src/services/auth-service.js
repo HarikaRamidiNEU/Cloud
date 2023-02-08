@@ -1,38 +1,6 @@
-import { generateAccessToken } from "../utils/token.js";
-import { hashPassword, comparePassword } from "../config/crypto.js";
-// import pool from "../config/database.js";
+import { hashPassword } from "../config/crypto.js";
 import { isValidEmail } from "../config/validators.js";
 import User from "../models/User.js";
-
-/**
- * This method is used to generate the accesstoken for the valid users
- * @param signInUser - user object with username and password
- */
- export const loginUser = async (signInUser) => {
-    const user = await User.findOne({where: {username: signInUser.username}})
-      if (!user) {
-        throw new Error("User Not found");
-      }
-      const passwordIsValid = await comparePassword(user.password, signInUser.password);
-      if (!passwordIsValid) {
-        throw new Error("Invalid Password");
-      }
-      else{
-      const aToken =  generateAccessToken(signInUser.username, signInUser.password);
-
-      const res = {
-        id: user.id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        username: user.username,
-        account_created: user.account_created,
-        account_updated: user.account_updated,
-        accessToken: aToken,
-      }
-      return res;
-    }
-  };
-
 
 /**
  * This method used to create a new user
@@ -55,8 +23,7 @@ import User from "../models/User.js";
                     last_name: row.last_name,
                     username: row.username,
                     account_created: row.account_created,
-                    account_updated: row.account_updated,
-                    token: generateAccessToken(username, password)
+                    account_updated: row.account_updated
                 }
                 res.status(201).send(user);
               } else {

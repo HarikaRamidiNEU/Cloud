@@ -1,6 +1,7 @@
 import userRouter from './user-router.js';
 import authRouter from './auth-router.js';
 import express from 'express';
+import productRouter from './product-router.js';
 const app = express()
 
 const routes = (app) => {
@@ -11,9 +12,11 @@ app.get('/healthz', (req, res) => {
     });
   });
   
-  app.use('/',userRouter);
+  app.use('/v1/user',userRouter);
   
-  app.use('/',authRouter);
+  app.use('/v1/user',authRouter);
+
+  app.use('/v1/product',productRouter)
 
 }
 

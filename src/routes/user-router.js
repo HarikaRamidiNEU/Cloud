@@ -5,7 +5,7 @@ import { setError } from '../utils/http-utils.js';
 const router = express.Router();
 
 // getUser Route
-router.get('/v1/user/:id', async (req, res)=> {
+router.get('/:id', async (req, res)=> {
     const status = await authRoute(req, res);
     if(status === 200)
         userController.getUser(req, res);
@@ -14,7 +14,7 @@ router.get('/v1/user/:id', async (req, res)=> {
 });
 
 // UpdateProfile Route
-router.put('/v1/user/:id', async (req, res)=> {
+router.put('/:id', async (req, res)=> {
     const status = await authRoute(req, res);
     if(status === 200)
         userController.updateProfile(req, res);

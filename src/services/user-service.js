@@ -9,6 +9,8 @@ import User from "../models/User.js";
 export const updateUser = async (req, res) => {
     const userId = req.params.id;
     const { first_name, last_name, password, username, id, account_created, account_updated } = req.body;
+    if(password)
+        req.body.password = await hashPassword(password);
     if(username || id || account_created || account_updated){
         res.status(400).send({
             message: "Bad request"
