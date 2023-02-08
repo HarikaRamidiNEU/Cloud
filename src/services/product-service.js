@@ -67,7 +67,7 @@ export const putProduct = async (req, res) => {
         res.status(400).send({
             message: "Bad request"
         });
-    } else if(!name || !description || !sku || !manufacturer)
+    } else if(!name || !description || !sku || !manufacturer || !(req.body.hasOwnProperty('quantity')))
         res.status(400).send({
             message: "Bad request"
         });
