@@ -38,6 +38,24 @@ describe('server check with healthz', function() {
           done();
         })
     });
+
+    it('get product data', (done) => {
+      request
+        .get('/v1/product/1')
+        .expect(200)
+        .end(done())
+    });
+
+    it('get product data without id', (done) => {
+      request
+        .get('/v1/product/')
+        .expect(404)
+        .end((err, res) => {
+          if(err) return done(err);
+          res.should.have.status(404);
+          done();
+        })
+    });
   })
 
   describe('Authenticated apis', function() {
@@ -45,7 +63,7 @@ describe('server check with healthz', function() {
       it('should return status 200 and user data', function(done){
         request
         .get('/v1/user/5')
-        .set('authorization', users.token)
+        .set('Authorization', users.token)
         .expect(200)
         .expect((res) => {
           expect(res.body.username).toBe(users.email);
@@ -56,7 +74,7 @@ describe('server check with healthz', function() {
       it('should return status 403 when requesting others data', function(done){
         request
         .get('/v1/user/1')
-        .set('authorization', users.token)
+        .set('Authorization', users.token)
         .expect(403)
         .end(done())
       });
@@ -64,7 +82,7 @@ describe('server check with healthz', function() {
       it('should return status 401 when requesting without token', function(done){
         request
         .get('/v1/user/5')
-        .set('authorization', '')
+        .set('Authorization', '')
         .expect(401)
         .end(done())
       });
@@ -72,7 +90,7 @@ describe('server check with healthz', function() {
       it('should return status 204 when updating user data', function(done){
         request
         .put('/v1/user/5')
-        .set('authorization', users.token)
+        .set('Authorization', users.token)
         .send({"first_name": "Person_first"})
         .expect(204)
         .end(done())
@@ -81,7 +99,7 @@ describe('server check with healthz', function() {
       it('should return status 403 when updating others data', function(done){
         request
         .put('/v1/user/1')
-        .set('authorization', users.token)
+        .set('Authorization', users.token)
         .send({"first_name": "Person_first"})
         .expect(403)
         .end(done())
@@ -90,7 +108,7 @@ describe('server check with healthz', function() {
       it('should return status 401 when updating without token', function(done){
         request
         .put('/v1/user/5')
-        .set('authorization', '')
+        .set('Authorization', '')
         .send({"first_name": "Person_first"})
         .expect(401)
         .end(done())
@@ -99,9 +117,89 @@ describe('server check with healthz', function() {
       it('should return status 400 when updating restricted fields', function(done){
         request
         .put('/v1/user/5')
-        .set('authorization', users.token)
+        .set('Authorization', users.token)
         .send({"account_created": "4567"})
         .expect(400)
+        .end(done())
+      });
+
+
+      it('should return status 400 when updating product restricted fields', function(done){
+        request
+        .put('/v1/product/5')
+        .set('Authorization', users.token)
+        .send({"date_added": "4567"})
+        .expect(400)
+        .end(done())
+      });
+
+      it('should return status 400 when updating product restricted fields', function(done){
+        request
+        .patch('/v1/product/5')
+        .set('Authorization', users.token)
+        .send({"date_added": "4567"})
+        .expect(400)
+        .end(done())
+      });
+
+      it('should return status 401 when updating product without token', function(done){
+        request
+        .patch('/v1/product/5')
+        .set('Authorization', '')
+        .send({"date_added": "4567"})
+        .expect(401)
+        .end(done())
+      });
+
+      it('should return status 401 when updating product without token', function(done){
+        request
+        .put('/v1/product/5')
+        .set('Authorization', '')
+        .send(users.product)
+        .expect(401)
+        .end(done())
+      });
+
+      it('should return status 200 when updating product', function(done){
+        request
+        .put('/v1/product/5')
+        .set('Authorization', users.token)
+        .send(users.product)
+        .expect(200)
+        .end(done())
+      });
+
+      it('should return status 200 when updating product', function(done){
+        request
+        .patch('/v1/product/5')
+        .set('Authorization', users.token)
+        .send(users.product)
+        .expect(200)
+        .end(done())
+      });
+
+      it('should return status 200 when creating a product', function(done){
+        request
+        .post('/v1/product/')
+        .set('Authorization', users.token)
+        .send(users.product)
+        .expect(200)
+        .end(done())
+      });
+
+      it('should return status 200 when deleting a product', function(done){
+        request
+        .delete('/v1/product/5')
+        .set('Authorization', users.token)
+        .expect(200)
+        .end(done())
+      });
+
+      it('should return status 401 when deleting product without token', function(done){
+        request
+        .delete('/v1/product/5')
+        .set('Authorization', '')
+        .expect(401)
         .end(done())
       });
 
