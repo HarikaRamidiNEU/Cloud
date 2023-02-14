@@ -1,30 +1,32 @@
+resource "random_id" "id" {
+  byte_length = 8
+}
 resource "aws_vpc" "main" {
   cidr_block = var.cidr
-
   tags = {
-    Name = "Project VPC"
+    Name = "${var.vpcName}-${random_id.id.hex}"
   }
 }
 
 resource "aws_subnet" "public_subnets" {
-  count             = length(var.public_subnet_cidrs)
+  count             = var.public_subnet_count
   vpc_id            = aws_vpc.main.id
   cidr_block        = element(var.public_subnet_cidrs, count.index)
-  availability_zone = element(var.public_azs, count.index)
+  availability_zone = "${var.region}${element(var.public_azs, count.index)}"
 
   tags = {
-    Name = "Public Subnet ${count.index + 1}"
+    Name = "Public_${random_id.id.hex}_${count.index + 1}"
   }
 }
 
 resource "aws_subnet" "private_subnets" {
-  count             = length(var.private_subnet_cidrs)
+  count             = var.private_subnet_count
   vpc_id            = aws_vpc.main.id
   cidr_block        = element(var.private_subnet_cidrs, count.index)
-  availability_zone = element(var.private_azs, count.index)
+  availability_zone = "${var.region}${element(var.private_azs, count.index)}"
 
   tags = {
-    Name = "Private Subnet ${count.index + 1}"
+    Name = "Private_${random_id.id.hex}_${count.index + 1}"
   }
 }
 
@@ -32,7 +34,7 @@ resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "Project VPC IG"
+    Name = "${var.igwName}-${random_id.id.hex}"
   }
 }
 
@@ -45,12 +47,12 @@ resource "aws_route_table" "public_rt" {
   }
 
   tags = {
-    Name = "public Route Table with route"
+    Name = "${var.public_route_table}-${random_id.id.hex}"
   }
 }
 
 resource "aws_route_table_association" "public_subnet_asso" {
-  count          = length(var.public_subnet_cidrs)
+  count          = var.public_subnet_count
   subnet_id      = element(aws_subnet.public_subnets[*].id, count.index)
   route_table_id = aws_route_table.public_rt.id
 }
@@ -59,12 +61,12 @@ resource "aws_route_table" "private_rt" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "private Route Table"
+    Name = "${var.private_route_table}-${random_id.id.hex}"
   }
 }
 
 resource "aws_route_table_association" "private_subnet_asso" {
-  count          = length(var.private_subnet_cidrs)
+  count          = var.private_subnet_count
   subnet_id      = element(aws_subnet.private_subnets[*].id, count.index)
   route_table_id = aws_route_table.private_rt.id
 }
