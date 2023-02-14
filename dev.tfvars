@@ -26,13 +26,3 @@ private_subnet_count = 3
 igwName              = "dev public internet gateway"
 public_route_table   = "DevPublicRouteTable"
 private_route_table  = "DevPrivateRouteTable"
-public_azs = [
-  "a",
-  "b",
-  "c",
-]
-private_azs = [
-  "d",
-  "e",
-  "f",
-]
