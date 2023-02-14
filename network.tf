@@ -1,6 +1,11 @@
 resource "random_id" "id" {
   byte_length = 8
 }
+
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 resource "aws_vpc" "main" {
   cidr_block = var.cidr
   tags = {
@@ -12,7 +17,7 @@ resource "aws_subnet" "public_subnets" {
   count             = var.public_subnet_count
   vpc_id            = aws_vpc.main.id
   cidr_block        = element(var.public_subnet_cidrs, count.index)
-  availability_zone = "${var.region}${element(var.public_azs, count.index)}"
+  availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
     Name = "Public_${random_id.id.hex}_${count.index + 1}"
@@ -23,7 +28,7 @@ resource "aws_subnet" "private_subnets" {
   count             = var.private_subnet_count
   vpc_id            = aws_vpc.main.id
   cidr_block        = element(var.private_subnet_cidrs, count.index)
-  availability_zone = "${var.region}${element(var.private_azs, count.index)}"
+  availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
     Name = "Private_${random_id.id.hex}_${count.index + 1}"

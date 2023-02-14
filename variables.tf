@@ -52,13 +52,3 @@ variable "private_subnet_cidrs" {
   type        = list(string)
   description = "Private Subnet CIDR values"
 }
-
-variable "public_azs" {
-  type        = list(string)
-  description = "Availability Zones"
-}
-
-variable "private_azs" {
-  type        = list(string)
-  description = "Availability Zones"
-}
