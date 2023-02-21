@@ -54,3 +54,4 @@ jobs:
           cwd: .
           files: .
           outPath: app.tar.gz
+      - run: ls
