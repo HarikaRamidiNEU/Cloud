@@ -29,13 +29,13 @@ jobs:
     steps:
       - name: Install PostgreSQL client
         run: |
-          apt-get update
-          apt-get install --yes postgresql-client
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-client
       - name: Query database
         run: psql -h postgres -d webapp -U postgres -c 'SELECT 1;'
         env:
           PGPASSWORD: password
-          
+
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
