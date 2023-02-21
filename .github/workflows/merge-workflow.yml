@@ -14,6 +14,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Setup PostgreSQL
+        uses: harmon758/postgresql-action@v1.0.0
+        with:
+          postgresql version: 15
+          postgresql db: postgres
+          postgresql user: postgres
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -27,7 +34,6 @@ jobs:
         id: compress
         with:
           command: c
-          cwd: .
-          files: |
-            .
+          cwd: ./*
+          files: ./*
           outPath: app.tar.gz
