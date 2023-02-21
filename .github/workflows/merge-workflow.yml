@@ -35,5 +35,5 @@ jobs:
         with:
           command: c
           cwd: .
-          files: ./*
+          files: .
           outPath: app.tar.gz
