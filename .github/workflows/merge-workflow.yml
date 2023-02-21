@@ -1,6 +1,8 @@
 name: Test Cases Workflow
 
 on: 
+  push:
+    branches: [ assignment4 ]
   pull_request:
     branches: [ main ]
 jobs:
@@ -18,3 +20,14 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm test
+
+      - uses: actions/checkout@master
+      - name: Compress action step
+        uses: a7ul/tar-action@v1.1.0
+        id: compress
+        with:
+          command: c
+          cwd: .
+          files: |
+            .
+          outPath: app.tar.gz
