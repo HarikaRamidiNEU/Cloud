@@ -31,10 +31,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes postgresql-client
-      - name: Query database
-        run: psql -h localhost -d webapp -U postgres -c 'SELECT 1;'
-        env:
-          PGPASSWORD: password
+
+      - name: 'Create env file'
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
 
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
