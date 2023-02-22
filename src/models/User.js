@@ -30,6 +30,4 @@ const User = sequelize.define('User', {
         updatedAt: 'account_updated'
     });
 
-    User.sync();
-
     export default User;

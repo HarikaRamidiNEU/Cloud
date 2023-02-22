@@ -48,9 +48,6 @@ const Product = sequelize.define('Product', {
     });
     Product.belongsTo(User, {
         foreignKey: "owner_user_id"
-      });
-    Product.sync();
-
-    
+      });    
 
     export default Product;
