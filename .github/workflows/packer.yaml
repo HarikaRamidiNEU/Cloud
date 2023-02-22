@@ -17,6 +17,23 @@ jobs:
       - uses: harmon758/postgresql-action@v1
         with:
           postgresql version: '15'  # See https://hub.docker.com/_/postgres for available versions
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm install
+      
+      - uses: actions/checkout@master
+      - name: Compress action step
+        uses: a7ul/tar-action@v1.1.0
+        id: compress
+        with:
+          command: c
+          cwd: .
+          files: .
+          outPath: app.tar.gz
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
