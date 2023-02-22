@@ -8,9 +8,14 @@
       sudo systemctl start postgresql
       sudo systemctl enable --now postgresql
       sudo systemctl status postgresql
-      sudo passwd postgres
-      XoXo1998
-      XoXo1998
+      username="postgres"
+      password="XoXo1998"
+
+      sudo passwd ${username} << EOD
+      ${password}
+      ${password}
+EOD
+      (sudo echo 'XoXo1998'; echo 'XoXo1998') | sudo passwd postgres
 
       sudo sed -i 's/ident/md5/g' /var/lib/pgsql/data/pg_hba.conf
       sudo sed -i 's/peer/md5/g' /var/lib/pgsql/data/pg_hba.conf
@@ -20,11 +25,13 @@
       sudo -u ec2-user sh -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash'
       sudo -u ec2-user sh -c '. ~/.nvm/nvm.sh && nvm install 16'
       sudo node -e "console.log('Running Node.js ' + process.version)"
+      sudo which node
 
       sudo cp /tmp/app.tar.gz /home/ec2-user/
       sudo su
       sudo tar -xzf app.tar.gz
-      sudo npm install
-      sudo node src/app.js
+      which node
+      npm install
+      node src/app.js
       
       
