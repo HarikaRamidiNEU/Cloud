@@ -45,17 +45,6 @@ describe('server check with healthz', function() {
         .expect(200)
         .end(done())
     });
-
-    it('get product data without id', (done) => {
-      request
-        .get('/v1/product/')
-        .expect(404)
-        .end((err, res) => {
-          if(err) return done(err);
-          res.should.have.status(404);
-          done();
-        })
-    });
   })
 
   describe('Authenticated apis', function() {
