@@ -13,8 +13,8 @@
       sudo systemctl enable --now postgresql
       sudo systemctl status postgresql
       sudo passwd postgres
-      postgres
-      postgres
+      XoXo1998
+      XoXo1998
 
       sudo sed -i 's/ident/md5/g' /var/lib/pgsql/data/pg_hba.conf
       sudo sed -i 's/peer/md5/g' /var/lib/pgsql/data/pg_hba.conf
@@ -22,7 +22,9 @@
       sudo echo "listen_addresses = '*'" >> /var/lib/pgsql/data/postgresql.conf
       
       sudo cp /tmp/app.tar.gz /home/ec2-user/
-      sudo tar -xvzf /home/ec2-user/app.tar.gz
-      sudo node /home/ec2-user/webapp/src/app.js
+      sudo su
+      sudo tar -xvzf app.tar.gz
+      sudo npm install
+      sudo node src/app.js
       
       
