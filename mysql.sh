@@ -15,22 +15,17 @@
       ${password}
       ${password}
 EOD
-      (sudo echo 'XoXo1998'; echo 'XoXo1998') | sudo passwd postgres
-
       sudo sed -i 's/ident/md5/g' /var/lib/pgsql/data/pg_hba.conf
       sudo sed -i 's/peer/md5/g' /var/lib/pgsql/data/pg_hba.conf
       sudo echo "host    all             all             0.0.0.0/0               md5" >> /var/lib/pgsql/data/pg_hba.conf
       sudo echo "listen_addresses = '*'" >> /var/lib/pgsql/data/postgresql.conf
       
-      sudo -u ec2-user sh -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash'
-      sudo -u ec2-user sh -c '. ~/.nvm/nvm.sh && nvm install 16'
-      sudo node -e "console.log('Running Node.js ' + process.version)"
-      sudo which node
+      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+      . ~/.nvm/nvm.sh && nvm install 16
+      node -e "console.log('Running Node.js ' + process.version)"
 
-      sudo cp /tmp/app.tar.gz /home/ec2-user/
-      sudo su
-      sudo tar -xzf app.tar.gz
-      which node
+      sudo cp /tmp/app.tar.gz .
+      tar -xzf app.tar.gz
       npm install
       node src/app.js
       
