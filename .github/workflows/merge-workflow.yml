@@ -36,10 +36,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes postgresql-client
-          sudo /usr/bin/postgresql-setup --initdb --unit postgresql
-          sudo systemctl start postgresql
-          sudo systemctl enable --now postgresql
-          sudo systemctl status postgresql
 
       - uses: actions/checkout@v3
       - name: 'Create env file'
