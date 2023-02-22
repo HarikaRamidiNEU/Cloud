@@ -15,10 +15,10 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_DB: webapp
-          POSTGRES_PASSWORD: password
-          POSTGRES_PORT: 5432
-          POSTGRES_USER: postgres
+          DATABASE_NAME: webapp
+          DATABASE_Password: password
+          DATABASE_PORT: 5432
+          DATABASE_USER: postgres
         ports:
           - 5432:5432
         options: >-
