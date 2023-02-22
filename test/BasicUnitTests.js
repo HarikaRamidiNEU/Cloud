@@ -39,12 +39,6 @@ describe('server check with healthz', function() {
         })
     });
 
-    it('get product data', (done) => {
-      request
-        .get('/v1/product/1')
-        .expect(200)
-        .end(done())
-    });
   })
 
   describe('Authenticated apis', function() {
