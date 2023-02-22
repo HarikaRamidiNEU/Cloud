@@ -28,6 +28,11 @@ variable "subnet_id" {
   default = "subnet-0e78878d05abcbe2c" #added my subnet
 }
 
+variable "instance_type" {
+  type    = string
+  default = "t2.micro"
+}
+
 
 # https://www.packer.io/plugins/builders/amazon/ebs
 source "amazon-ebs" "my-ami" {
@@ -44,8 +49,7 @@ source "amazon-ebs" "my-ami" {
     max_attempts  = 50
   }
 
-
-  instance_type = "t2.micro"
+  instance_type = "${var.instance_type}"
   source_ami    = "${var.source_ami}"
   ssh_username  = "${var.ssh_username}"
   subnet_id     = "${var.subnet_id}"
@@ -71,13 +75,13 @@ build {
     destination = "/tmp/appservice.service"
   }
 
-  provisioner "shell" { 
+  provisioner "shell" {
     scripts = [
       "./mysql.sh"
     ]
   }
-  
-   post-processor "manifest" {
+
+  post-processor "manifest" {
 
     output = "manifest.json"
 
@@ -85,10 +89,10 @@ build {
 
     custom_data = {
 
-    my_custom_data = "example"
+      my_custom_data = "example"
 
-}
+    }
 
-}
+  }
 
 }
