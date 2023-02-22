@@ -15,10 +15,10 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          DATABASE_NAME: webapp
-          DATABASE_Password: password
-          DATABASE_PORT: 5432
-          DATABASE_USER: postgres
+          POSTGRES_DB: webapp
+          POSTGRES_PASSWORD: password
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: postgres
         ports:
           - 5432:5432
         options: >-
@@ -34,7 +34,7 @@ jobs:
 
       - name: 'Create env file'
         run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
+          echo "${{ secrets.ENV_FILE }}" >> .env
 
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
