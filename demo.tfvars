@@ -26,3 +26,5 @@ private_subnet_count = 3
 igwName              = "demo public internet gateway"
 public_route_table   = "DemoPublicRouteTable"
 private_route_table  = "DemoPrivateRouteTable"
+aws_key_pair = "ec2"
+ec2_instance_type = "t2.micro"
