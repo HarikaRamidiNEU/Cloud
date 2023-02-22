@@ -8,3 +8,7 @@ resource "aws_instance" "application-ec2" {
     aws_security_group.application.id
   ]
 }
+resource "aws_eip" "lb" {
+  instance = aws_instance.application-ec2.id
+  vpc      = true
+}
