@@ -23,7 +23,7 @@
       
       sudo cp /tmp/app.tar.gz /home/ec2-user/
       sudo su
-      sudo tar -xvzf app.tar.gz
+      sudo tar -xzf app.tar.gz
       sudo npm install
       sudo node src/app.js
       
