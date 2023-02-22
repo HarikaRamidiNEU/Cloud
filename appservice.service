@@ -2,7 +2,7 @@
 Description=Web App
 
 [Service]
-ExecStart=/usr/bin/node /home/ec2-user/src/app.js
+ExecStart=sudo /usr/bin/node /home/ec2-user/src/app.js
 Restart=on-failure
 User=ec2user
 
