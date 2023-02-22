@@ -31,6 +31,7 @@ EOD
       sudo cp /tmp/app.tar.gz .
       tar -xzf app.tar.gz
       
+      sudo mv /tmp/appservice.service /etc/systemd/system/appservice.service
       sudo systemctl daemon-reload
       sudo systemctl enable appservice.service
       sudo systemctl start appservice.service
