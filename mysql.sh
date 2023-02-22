@@ -1,10 +1,6 @@
 #!/bin/sh
 
       sudo yum update -y
-      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-      . ~/.nvm/nvm.sh
-      nvm install 16
-      node -e "console.log('Running Node.js ' + process.version)"
 
       sudo amazon-linux-extras install postgresql9.6 -y
       sudo yum install postgresql postgresql-server java-1.8.0 glibc.i686 -y
@@ -21,6 +17,10 @@
       sudo echo "host    all             all             0.0.0.0/0               md5" >> /var/lib/pgsql/data/pg_hba.conf
       sudo echo "listen_addresses = '*'" >> /var/lib/pgsql/data/postgresql.conf
       
+      sudo -u ec2-user sh -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash'
+      sudo -u ec2-user sh -c '. ~/.nvm/nvm.sh && nvm install 16'
+      sudo node -e "console.log('Running Node.js ' + process.version)"
+
       sudo cp /tmp/app.tar.gz /home/ec2-user/
       sudo su
       sudo tar -xzf app.tar.gz
