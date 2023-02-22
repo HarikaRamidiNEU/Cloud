@@ -35,7 +35,6 @@ jobs:
       - name: 'Create env file'
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
-          echo "${{ secrets.ENV_FILE }}"
 
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -54,4 +53,3 @@ jobs:
           cwd: .
           files: .
           outPath: app.tar.gz
-      - run: ls
