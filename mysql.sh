@@ -15,10 +15,10 @@
       ${password}
       ${password}
 EOD
-      sudo sed -i 's/ident/md5/g' /var/lib/pgsql/data/pg_hba.conf
       sudo sed -i 's/peer/md5/g' /var/lib/pgsql/data/pg_hba.conf
-      sudo echo '"host    all             all             0.0.0.0/0               md5" >> /var/lib/pgsql/data/pg_hba.conf'
-      sudo echo '"listen_addresses = '*'" >> /var/lib/pgsql/data/postgresql.conf'
+      sudo sed -i 's/md5/ident/g' /var/lib/pgsql/data/pg_hba.conf
+      echo "host    all             all             0.0.0.0/0               ident" | sudo tee -a /var/lib/pgsql/data/pg_hba.conf
+      echo "listen_addresses = '*'" | sudo tee -a /var/lib/pgsql/data/postgresql.conf
 
       curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
       . ~/.nvm/nvm.sh && nvm install 16
