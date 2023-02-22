@@ -13,12 +13,16 @@ resource "aws_vpc" "main" {
   }
 }
 
+resource "aws_vpc_ipv4_cidr_block_association" "secondary_cidr" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "172.2.0.0/16"
+}
+
 resource "aws_subnet" "public_subnets" {
   count             = var.public_subnet_count
   vpc_id            = aws_vpc.main.id
   cidr_block        = element(var.public_subnet_cidrs, count.index)
   availability_zone = data.aws_availability_zones.available.names[count.index % length(data.aws_availability_zones.available.zone_ids)]
-
   tags = {
     Name = "Public_${random_id.id.hex}_${count.index + 1}"
   }
