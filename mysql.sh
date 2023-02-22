@@ -30,7 +30,8 @@ EOD
 
       sudo cp /tmp/app.tar.gz .
       tar -xzf app.tar.gz
-      npm install
-      node src/app.js
       
-      
+      sudo systemctl daemon-reload
+      sudo systemctl enable appservice.service
+      sudo systemctl start appservice.service
+      sudo systemctl status appservice.service
