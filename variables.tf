@@ -54,16 +54,16 @@ variable "private_subnet_cidrs" {
 }
 
 variable "my_ami" {
-  type = string
+  type        = string
   description = "The ami which is created with all the configuration"
 }
 
 variable "ec2_instance_type" {
-  type = string
+  type        = string
   description = "EC2 instance type"
 }
 
 variable "aws_key_pair" {
-  type= string
+  type        = string
   description = "EC2 key pair"
 }
