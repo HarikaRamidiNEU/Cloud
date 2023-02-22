@@ -2,7 +2,7 @@
 Description=Web App
 
 [Service]
-ExecStart= npm install && node src/app.js
+ExecStart=/usr/bin/startserver.sh
 Restart=on-failure
 User=ec2user
 
