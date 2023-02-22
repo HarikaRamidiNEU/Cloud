@@ -25,7 +25,7 @@ EOD
       sudo systemctl restart postgresql
 
       sudo mv /tmp/startserver.sh /usr/bin/startserver.sh
-
+      sudo chmod +x /usr/bin/startserver.sh
       sudo mv /tmp/appservice.service /etc/systemd/system/appservice.service
       sudo systemctl daemon-reload
       sudo systemctl enable appservice.service
