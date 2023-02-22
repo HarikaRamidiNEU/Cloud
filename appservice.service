@@ -2,8 +2,7 @@
 Description=Web App
 
 [Service]
-sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
-ExecStart= /usr/bin/node /home/ec2user/src/app.js
+ExecStart= /usr/bin/node /home/ec2-user/webapp/src/app.js
 Restart=on-failure
 User=ec2user
 
