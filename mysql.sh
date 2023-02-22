@@ -32,8 +32,6 @@ EOD
       sudo tar -xzf /home/ec2-user/app.tar.gz -C /home/ec2-user/
       sudo chmod -R +x /home/ec2-user/
       sudo /usr/bin/npm --prefix /home/ec2-user/ install /home/ec2-user/
-
-      sudo /usr/bin/node /home/ec2-user/src/app.js
      
       sudo mv /tmp/appservice.service /etc/systemd/system/appservice.service
       sudo systemctl daemon-reload
