@@ -3,6 +3,8 @@
       . ~/.nvm/nvm.sh && nvm install 16
       node -e "console.log('Running Node.js ' + process.version)"
 
+      mkdir testApp
+      cd testApp
       sudo cp /tmp/app.tar.gz .
       tar -xzf app.tar.gz
       npm install
