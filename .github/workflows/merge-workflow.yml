@@ -57,3 +57,17 @@ jobs:
           cwd: .
           files: .
           outPath: app.tar.gz
+          
+      - name: Packer Init
+        uses: hashicorp/packer-github-actions@master
+        with:
+          command: init
+          target: myami.pkr.hcl
+
+      # validate templates
+      - name: Validate Template
+        uses: hashicorp/packer-github-actions@master
+        with:
+          command: validate
+          arguments: -syntax-only
+          target: myami.pkr.hcl

@@ -112,11 +112,6 @@ build {
     source      = "./appservice.service"
   }
 
-  provisioner "file" {
-    destination = "/tmp/"
-    source      = "./startserver.sh"
-  }
-
   provisioner "shell" {
     script = "mysql.sh"
   }
