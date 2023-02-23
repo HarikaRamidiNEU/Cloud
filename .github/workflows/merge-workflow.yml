@@ -1,8 +1,6 @@
 name: Test Cases Workflow
 
 on: 
-  push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
 jobs:
@@ -38,9 +36,6 @@ jobs:
           sudo apt-get install --yes postgresql-client
 
       - uses: actions/checkout@v3
-      - name: 'Create env file'
-        run: |
-          echo "${{ secrets.ENV_FILE }}" >> .env
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -57,7 +52,7 @@ jobs:
           cwd: .
           files: .
           outPath: app.tar.gz
-          
+
       - name: Packer Init
         uses: hashicorp/packer-github-actions@master
         with:
