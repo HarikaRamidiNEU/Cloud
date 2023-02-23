@@ -1,8 +1,6 @@
 name: Test Cases Workflow
 
 on: 
-  push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
 jobs:
@@ -57,7 +55,7 @@ jobs:
           cwd: .
           files: .
           outPath: app.tar.gz
-          
+
       - name: Packer Init
         uses: hashicorp/packer-github-actions@master
         with:
