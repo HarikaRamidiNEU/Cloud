@@ -16,6 +16,10 @@ resource "aws_vpc" "main" {
 resource "aws_vpc_ipv4_cidr_block_association" "secondary_cidr" {
   vpc_id     = aws_vpc.main.id
   cidr_block = "172.2.0.0/16"
+
+  depends_on = [
+    aws_vpc.main,
+  ]
 }
 
 resource "aws_subnet" "public_subnets" {
@@ -26,6 +30,10 @@ resource "aws_subnet" "public_subnets" {
   tags = {
     Name = "Public_${random_id.id.hex}_${count.index + 1}"
   }
+
+  depends_on = [
+    aws_vpc.main,
+  ]
 }
 
 resource "aws_subnet" "private_subnets" {
@@ -37,6 +45,10 @@ resource "aws_subnet" "private_subnets" {
   tags = {
     Name = "Private_${random_id.id.hex}_${count.index + 1}"
   }
+
+  depends_on = [
+    aws_vpc.main,
+  ]
 }
 
 resource "aws_internet_gateway" "gw" {
@@ -45,6 +57,10 @@ resource "aws_internet_gateway" "gw" {
   tags = {
     Name = "${var.igwName}-${random_id.id.hex}"
   }
+
+  depends_on = [
+    aws_vpc.main,
+  ]
 }
 
 resource "aws_route_table" "public_rt" {
@@ -58,12 +74,21 @@ resource "aws_route_table" "public_rt" {
   tags = {
     Name = "${var.public_route_table}-${random_id.id.hex}"
   }
+
+  depends_on = [
+    aws_vpc.main,
+    aws_internet_gateway.gw,
+  ]
 }
 
 resource "aws_route_table_association" "public_subnet_asso" {
   count          = var.public_subnet_count
   subnet_id      = element(aws_subnet.public_subnets[*].id, count.index)
   route_table_id = aws_route_table.public_rt.id
+
+  depends_on = [
+    aws_route_table.public_rt,
+  ]
 }
 
 resource "aws_route_table" "private_rt" {
@@ -72,10 +97,17 @@ resource "aws_route_table" "private_rt" {
   tags = {
     Name = "${var.private_route_table}-${random_id.id.hex}"
   }
+  depends_on = [
+    aws_vpc.main,
+  ]
 }
 
 resource "aws_route_table_association" "private_subnet_asso" {
   count          = var.private_subnet_count
   subnet_id      = element(aws_subnet.private_subnets[*].id, count.index)
   route_table_id = aws_route_table.private_rt.id
+
+  depends_on = [
+    aws_route_table.private_rt,
+  ]
 }
