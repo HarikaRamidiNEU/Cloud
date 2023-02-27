@@ -115,5 +115,3 @@ build {
   provisioner "shell" {
     script = "mysql.sh"
   }
-
-}
