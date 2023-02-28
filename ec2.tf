@@ -14,12 +14,13 @@ resource "aws_instance" "application-ec2" {
   }
   user_data = <<EOF
 #!/bin/bash
-export DATABASE_USER=csye6225
-export DATABASE_HOST=${aws_db_instance.databaseInstance.endpoint}
-export DATABASE_NAME=csye6225
-export DATABASE_Password=password
-export DATABASE_PORT=5432
-export AWS_BUCKET_NAME=${local.bucket_name}
+touch .env
+echo DATABASE_USER=csye6225 >> .env
+echo DATABASE_HOST=${aws_db_instance.databaseInstance.endpoint} >> .env
+echo DATABASE_NAME=csye6225 >> .env
+echo DATABASE_Password=password >> .env
+echo DATABASE_PORT=5432 >> .env
+echo AWS_BUCKET_NAME=${local.bucket_name} >> .env
 EOF
   depends_on = [
     aws_subnet.public_subnets,
