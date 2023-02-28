@@ -34,8 +34,8 @@
       sudo /usr/bin/npm --prefix /home/ec2-user/ install /home/ec2-user/
       sudo chmod -R +x /home/ec2-user/
      
-      # sudo mv /tmp/appservice.service /etc/systemd/system/appservice.service
-      # sudo systemctl daemon-reload
-      # sudo systemctl enable appservice.service
-      # sudo systemctl start appservice.service
-      # sudo systemctl status appservice.service
+      sudo mv /tmp/appservice.service /etc/systemd/system/appservice.service
+      sudo systemctl daemon-reload
+      sudo systemctl enable appservice.service
+      sudo systemctl start appservice.service
+      sudo systemctl status appservice.service
