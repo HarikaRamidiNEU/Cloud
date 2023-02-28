@@ -33,6 +33,22 @@ resource "aws_security_group" "application" {
   tags = {
     Name = "application Security Group"
   }
+}
 
+resource "aws_security_group_rule" "ec2databaseConnection" {
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.application.id
 
+  security_group_id = aws_security_group.database.id
+}
+
+resource "aws_security_group" "database" {
+  name   = "database"
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = "database Security Group"
+  }
 }
