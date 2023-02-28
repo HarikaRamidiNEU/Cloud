@@ -3,6 +3,7 @@ Description=Web App
 After=cloud-final.service
 
 [Service]
+WorkingDirectory=~
 ExecStart=/usr/bin/node /home/ec2-user/src/app.js
 Restart=on-failure
 User=ec2-user
