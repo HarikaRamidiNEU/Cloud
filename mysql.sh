@@ -30,9 +30,10 @@
       sudo yum install nodejs -y
       sudo cp /tmp/app.tar.gz /home/ec2-user/
       sudo tar -xzf /home/ec2-user/app.tar.gz -C /home/ec2-user/
-      sudo chmod -R +wx /home/ec2-user/
+      sudo chmod -R +rwx /home/ec2-user/
       sudo /usr/bin/npm --prefix /home/ec2-user/ install /home/ec2-user/
-      sudo chmod -R +wx /home/ec2-user/
+      sudo chmod -R +rwx /home/ec2-user/
+      sudo chmod 777 /home/ec2-user/uploads/
      
       sudo mv /tmp/appservice.service /etc/systemd/system/appservice.service
       sudo systemctl daemon-reload
