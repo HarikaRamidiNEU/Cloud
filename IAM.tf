@@ -26,8 +26,8 @@ resource "aws_iam_policy" "WebAppS3" {
         ]
         Effect = "Allow"
         "Resource" : [
-          "arn:aws:s3:::${aws_s3_bucket.private_bucket.bucket}",
-          "arn:aws:s3:::${aws_s3_bucket.private_bucket.bucket}/*"
+          "arn:aws:s3:::${local.bucket_name}",
+          "arn:aws:s3:::${local.bucket_name}/*"
         ]
       },
     ]
