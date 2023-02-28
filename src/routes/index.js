@@ -16,7 +16,7 @@ app.get('/healthz', (req, res) => {
   
   app.use('/v1/user',authRouter);
 
-  app.use('/v1/product',productRouter)
+  app.use('/v1/product',productRouter);
 
 }
 
