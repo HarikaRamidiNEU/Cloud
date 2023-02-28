@@ -14,11 +14,13 @@ resource "aws_instance" "application-ec2" {
   }
   user_data = <<EOF
 #!/bin/bash
+yum update -y
+cd /home/ec2-user/src/
 touch .env
 echo DATABASE_USER=csye6225 >> .env
-echo DATABASE_HOST=${aws_db_instance.databaseInstance.endpoint} >> .env
+echo DATABASE_HOST=${element(split(":", aws_db_instance.databaseInstance.endpoint), 0)} >> .env
 echo DATABASE_NAME=csye6225 >> .env
-echo DATABASE_Password=password >> .env
+echo DATABASE_Password=postgres >> .env
 echo DATABASE_PORT=5432 >> .env
 echo AWS_BUCKET_NAME=${local.bucket_name} >> .env
 EOF
