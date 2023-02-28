@@ -1,5 +1,6 @@
 [Unit]
 Description=Web App
+After=cloud-final.service
 
 [Service]
 ExecStart=/usr/bin/node /home/ec2-user/src/app.js
@@ -7,4 +8,4 @@ Restart=on-failure
 User=ec2-user
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=cloud-init.target

@@ -48,11 +48,9 @@ export const deleteFile = async(fileName) => {
         Key: fileName
        };
 
-    const data = await S3.deleteObject(deleteParam, function(err, data) {
+    await S3.deleteObject(deleteParam, function(err, data) {
         if (err) throw err;
         console.log(data);
         console.log('Deleted!');
-    }).promise();
-    console.log(data);
-    return data;
+    })
 }
