@@ -28,11 +28,11 @@
       curl -sL https://rpm.nodesource.com/setup_16.x | sudo bash -
       sudo yum update -y
       sudo yum install nodejs -y
-      # sudo cp /tmp/app.tar.gz /home/ec2-user/
-      # sudo tar -xzf /home/ec2-user/app.tar.gz -C /home/ec2-user/
-      # sudo chmod -R +x /home/ec2-user/
-      # sudo /usr/bin/npm --prefix /home/ec2-user/ install /home/ec2-user/
-      # sudo chmod -R +x /home/ec2-user/
+      sudo cp /tmp/app.tar.gz /home/ec2-user/
+      sudo tar -xzf /home/ec2-user/app.tar.gz -C /home/ec2-user/
+      sudo chmod -R +x /home/ec2-user/
+      sudo /usr/bin/npm --prefix /home/ec2-user/ install /home/ec2-user/
+      sudo chmod -R +x /home/ec2-user/
      
       # sudo mv /tmp/appservice.service /etc/systemd/system/appservice.service
       # sudo systemctl daemon-reload
