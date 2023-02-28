@@ -2,7 +2,7 @@
 
       sudo yum update -y
 
-#       sudo amazon-linux-extras install postgresql9.6 -y
+      sudo amazon-linux-extras install postgresql15 -y
 #       sudo yum install postgresql postgresql-server java-1.8.0 glibc.i686 -y
 #       sudo /usr/bin/postgresql-setup --initdb --unit postgresql
 #       sudo systemctl start postgresql
