@@ -1,8 +1,11 @@
 import { productRoute } from '../middlewares/productRoute.js';
 import { authRoute } from '../middlewares/authRoute.js';
 import  * as productController from '../controllers/product-controller.js';
+import  * as s3Controller from '../controllers/s3-controller.js';
 import express from 'express';
 const router = express.Router();
+import multer from "multer"
+const upload = multer({ dest: "uploads/" });
 
 // get Product Route
 router.get('/:id', async (req, res)=> {
@@ -41,6 +44,42 @@ router.delete('/:id', async (req, res)=> {
     const status = await productRoute(req, res);
     if(status === 200)
         productController.deleteProduct(req, res);
+    else
+        res.status(status).send("");
+});
+
+// get All Images Route
+router.get('/:id/image', async (req, res)=> {
+    const status = await productRoute(req, res);
+    if(status === 200)
+        s3Controller.getAllImages(req, res);
+    else
+        res.status(status).send("");
+});
+
+// get a single Image Route
+router.get('/:id/image/:imageId', async (req, res)=> {
+    const status = await productRoute(req, res);
+    if(status === 200)
+        s3Controller.getImage(req, res);
+    else
+        res.status(status).send("");
+});
+
+// Create Image with post Route
+router.post('/:id/image',upload.single('file'), async (req, res)=> {
+    const status = await productRoute(req, res);
+    if(status === 200)
+        s3Controller.uploadImage(req, res);
+    else
+        res.status(status).send("");
+});
+
+// delete Image Route
+router.delete('/:id/image/:imageId', async (req, res)=> {
+    const status = await productRoute(req, res);
+    if(status === 200)
+        s3Controller.deleteImage(req, res);
     else
         res.status(status).send("");
 });
