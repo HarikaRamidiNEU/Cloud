@@ -67,3 +67,18 @@ variable "aws_key_pair" {
   type        = string
   description = "EC2 key pair"
 }
+
+variable "database_name" {
+  type        = string
+  description = "Database host"
+}
+
+variable "database_username" {
+  type        = string
+  description = "Database host"
+}
+
+variable "database_password" {
+  type        = string
+  description = "Database host"
+}
