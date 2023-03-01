@@ -4,13 +4,18 @@ import * as s3uploader from "../middlewares/s3FileUploader.js"
 
 export const uploadFile = async(req, res) => {
     const file  = req.file;
-    console.log(file);
+    const fileType = req.body.filetype;
+    const supportedFileTypes = ['jpeg','png','jpg'];
     try {
-        if (!file)
+        if (!file || !fileType)
             res.status(400).send({
                 message: "Bad request."
             })
         else {
+            if(!supportedFileTypes.includes(fileType))
+                res.status(400).send({
+                    message: "Bad Request, either fileType is not supported or the file and filetype are mismatching please check."
+                })
             const productId = req.params.id;
             const product = await Product.findByPk(productId);
             if (product) {
