@@ -23,6 +23,10 @@ echo DATABASE_NAME=csye6225 >> .env
 echo DATABASE_Password=postgres >> .env
 echo DATABASE_PORT=5432 >> .env
 echo AWS_BUCKET_NAME=${local.bucket_name} >> .env
+
+cp .env /home/ec2-user/
+chmod -R 777 /home/ec2-user/
+
 EOF
   depends_on = [
     aws_subnet.public_subnets,
