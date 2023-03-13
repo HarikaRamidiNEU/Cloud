@@ -82,3 +82,13 @@ variable "database_password" {
   type        = string
   description = "Database host"
 }
+
+variable "route53RecordName" {
+  type        = string
+  description = "Route 53 record name"
+}
+
+variable "hostedZoneID" {
+  type        = string
+  description = "Route 53 hosted zone id"
+}
