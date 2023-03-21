@@ -3,6 +3,8 @@ name: Test Cases Workflow
 on: 
   pull_request:
     branches: [ main ]
+  push:
+    branches: ["assignment7"]
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -2,7 +2,7 @@ name: Packer config
 
 on:
   push:
-    branches: ["main", "assignment7"]
+    branches: ["assignment7"]
 
 jobs:
   packer:
@@ -41,16 +41,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install
-      
+      - run: npm ci
+      - run: npm test
+
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm test
-
-      
+      - run: npm install
 
       - uses: actions/checkout@master
       - name: Compress action step
