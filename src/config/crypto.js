@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import logger from 'winston';
 
 /**
  * Salt for generating hash.
@@ -12,6 +13,7 @@ const salt = bcrypt.genSaltSync(10);
  * @returns Hashed password.
  */
 export const hashPassword = (password) => {
+    logger.info("Hashing the password");
     return bcrypt.hash(password, salt);
 }
 
@@ -23,5 +25,7 @@ export const hashPassword = (password) => {
  * @returns true, if the password match.
  */
 export const comparePassword = (hashedPassword, password) => {
-    return bcrypt.compare(password, hashedPassword);
+    let comparisonResult = bcrypt.compare(password, hashedPassword)
+    logger.info("Comparing passwords:"+ comparisonResult);
+    return comparisonResult;
 }

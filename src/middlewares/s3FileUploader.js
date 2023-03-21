@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import AWS from 'aws-sdk';
-import fs from "fs"
+import fs from "fs";
+import logger from '../config/logger.js'
 
 
 const ID = process.env.AWS_ACCESS_ID ;
@@ -17,10 +18,12 @@ const S3 = new AWS.S3({
 const getUniqFileName = (originalname) => {
     const name = uuidv4();
     const ext = originalname.split('.').pop();
+    logger.info(`generated fileName for the API is ${name}.${ext}`);
     return `${name}.${ext}`;
 }
 
 export const uploadFile = async(userId, productId, fileName, originalname) => {
+    logger.info("Uploading file to s3");
     const fileContent = fs.readFileSync(fileName);
 
     // Setting up S3 upload parameters
@@ -35,22 +38,25 @@ export const uploadFile = async(userId, productId, fileName, originalname) => {
         if (err) {
             throw err;
         }
-        console.log('File uploaded successfully.');
+        logger.info('File uploaded successfully.');
         return data;
     }).promise();
     return data;
 }
 
 export const deleteFile = async(fileName) => {
-   
+    logger.info("Performing hard delete on file in s3");
     var deleteParam = {
         Bucket: BUCKET_NAME, 
         Key: fileName
        };
 
     await S3.deleteObject(deleteParam, function(err, data) {
-        if (err) throw err;
-        console.log(data);
-        console.log('Deleted!');
+        if (err){ 
+            logger.error(err);
+            throw err
+        };
+        logger.info(data)
+        logger.info(fileName+' file Deleted successfully');
     })
 }

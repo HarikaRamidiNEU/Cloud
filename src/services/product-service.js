@@ -1,6 +1,7 @@
 import Product from "../models/Product.js";
 import User from "../models/User.js";
 import auth from "basic-auth";
+import logger from "../config/logger.js"
 
 /**
  * This method used to create a new product
@@ -14,10 +15,12 @@ export const createProduct = async (req, res) => {
         quantity
     } = req.body;
     try {
-        if (quantity && (quantity < 0 || quantity > 100))
+        if (quantity && (quantity < 0 || quantity > 100)){
+            logger.error("Quantity is less than 0 or greater than 100");
             res.status(400).send({
                 message: "Bad request. Quantity cannot be less than 0 or greater than 100"
             })
+        }
         else {
             const product = await Product.findOne({
                 where: {
@@ -25,7 +28,7 @@ export const createProduct = async (req, res) => {
                 }
             })
             if (!product) {
-                console.log("There is no such product, adding now");
+                logger.info("There is no such product, adding now");
                 const user = await auth(req);
                 const dbuser = await User.findOne({
                     where: {
@@ -34,14 +37,17 @@ export const createProduct = async (req, res) => {
                 });
                 req.body.owner_user_id = dbuser.id;
                 const row = await Product.create(req.body);
+                logger.info("Product has been created with id: "+row.id);
                 res.status(201).send(row);
             } else {
+                logger.error("Product with same sku already exists!");
                 res.status(400).send({
                     message: "Bad Request, Product with same sku already exists!"
                 })
             }
         }
     } catch (err) {
+        logger.error(err);
         res.status(400).send({
             message: "Bad request"
         })
@@ -64,27 +70,36 @@ export const putProduct = async (req, res) => {
         owner_user_id
     } = req.body;
     if (date_added || id || owner_user_id || date_last_updated) {
+        logger.error("user is trying to update the system variables like id, date_added, owner_user_id and date_last_updated");
         res.status(400).send({
             message: "Bad request"
         });
-    } else if(!name || !description || !sku || !manufacturer || !(req.body.hasOwnProperty('quantity')))
+    } else if(!name || !description || !sku || !manufacturer || !(req.body.hasOwnProperty('quantity'))){
+        logger.error("mandatory details are not part of the request");
         res.status(400).send({
             message: "Bad request"
         });
+    }
     else {
         try {
-            if (quantity && (quantity < 0 || quantity > 100))
-            res.status(400).send({
-                message: "Bad request. Quantity cannot be less than 0 or greater than 100"
-            })
+            if (quantity && (quantity < 0 || quantity > 100)){
+                logger.error("Quantity is less than 0 or greater than 100");
+                res.status(400).send({
+                    message: "Bad request. Quantity cannot be less than 0 or greater than 100"
+                })
+            }
             const product = await Product.findByPk(productId);
             if (product) {
                 product.update(req.body);
+                logger.info("Product with productId: "+productId+" updated successfully");
                 res.status(204).send({
                             message: "Product updated successfully"
                         });
             }
+            else
+                logger.info("Product with productId: "+productId+" doesn't exists");
         } catch (err) {
+            logger.error(err);
             res.status(400).send({
                 message: "Bad request"
             });
@@ -108,23 +123,30 @@ export const patchProduct = async (req, res) => {
         owner_user_id
     } = req.body;
     if (date_added || id || owner_user_id || date_last_updated) {
+        logger.error("user is trying to update the system variables like id, date_added, owner_user_id and date_last_updated");
         res.status(400).send({
             message: "Bad request"
         });
     } else {
         try {
-            if (quantity && (quantity < 0 || quantity > 100))
-            res.status(400).send({
-                message: "Bad request. Quantity cannot be less than 0 or greater than 100"
-            })
+            if (quantity && (quantity < 0 || quantity > 100)){
+                logger.error("Quantity is less than 0 or greater than 100");
+                res.status(400).send({
+                    message: "Bad request. Quantity cannot be less than 0 or greater than 100"
+                })
+            }
             const product = await Product.findByPk(productId);
             if (product) {
                 product.update(req.body);
+                logger.info("Product with productId: "+productId+" updated successfully");
                 res.status(204).send({
                             message: "Product updated successfully"
                         });
             }
+            else
+                logger.info("Product with productId: "+productId+" doesn't exists");
         } catch (err) {
+            logger.error(err);
             res.status(400).send(err);
         }
     }
@@ -138,7 +160,9 @@ export const patchProduct = async (req, res) => {
  */
 export const getProduct = async (req, res) => {
     const productId = req.params.id;
+    logger.info("getting the product details from database");
     const row = await Product.findByPk(productId);
+    logger.info("product details with productId"+productId+"have been retrieved from database");
     res.status(200).json(row);
 };
 
@@ -150,15 +174,21 @@ export const getProduct = async (req, res) => {
  */
 export const deleteProduct = async (req, res) => {
     const productId = req.params.id;
-    if (!productId)
+    if (!productId){
+        logger.error("productId is null");
         res.status(400).json("Bad Request");
+    }
     const row = await Product.destroy({
         where: {
             id: productId
         }
     });
-    if (row === 1)
+    if (row === 1){
+        logger.info("product with productId "+productId+" has been deleted successfully");
         res.status(204).json(row);
-    else
+    }
+    else{
+        logger.info("Product with productId: "+productId+" doesn't exists");
         res.status(404).send("");
+    }
 };

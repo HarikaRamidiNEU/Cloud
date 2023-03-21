@@ -1,5 +1,6 @@
 import * as authService from "../services/auth-service.js";
 import { setResponse, setError } from "../utils/http-utils.js";
+import logger from '../config/logger.js'
 
 /**
  * It logsIn a user and returns the accesstoken in the response
@@ -9,10 +10,11 @@ import { setResponse, setError } from "../utils/http-utils.js";
  */
 export const login = async (req, response) => {
     try {
+      logger.info("Login api is triggered")
       const userWithToken = await authService.loginUser(req.body);
       setResponse(response, userWithToken);
     } catch (err) {
-        console.log(err);
+        logger.error(err);
       if (err.message === "User Not found.") setError(response, err, 404);
       else if (err.message === "Invalid Password") setError(response, err, 401);
       else setError(response, err, 500);
@@ -27,9 +29,10 @@ export const login = async (req, response) => {
  */
  export const createUser = async(req, response) => {
     try {
+        logger.info("Create User API is triggered")
         const user = await authService.createUser(req, response);
     } catch (err) {
-        console.log(err)
+        logger.error(err)
         setError(response, err);
     }
 }

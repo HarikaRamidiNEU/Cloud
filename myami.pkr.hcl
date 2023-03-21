@@ -112,6 +112,11 @@ build {
     source      = "./appservice.service"
   }
 
+   provisioner "file" {
+    destination = "/tmp/"
+    source      = "./amazon-cloudwatch-agent.json"
+  }
+
   provisioner "shell" {
     script = "mysql.sh"
   }
