@@ -3,7 +3,7 @@ import  * as userController from '../controllers/user-controller.js';
 import express from 'express';
 import { setError } from '../utils/http-utils.js';
 const router = express.Router();
-import StatsD from 'node-statsd';
+import StatsD from 'statsd-client';
 
 const client = new StatsD();
 // getUser Route
