@@ -1,7 +1,8 @@
 import * as authService from "../services/auth-service.js";
 import { setResponse, setError } from "../utils/http-utils.js";
 import logger from '../config/logger.js'
-
+import StatsD from 'node-statsd';
+const client = new StatsD();
 /**
  * It logsIn a user and returns the accesstoken in the response
  * @param req - Http Request with <ISignInUser> as body
@@ -10,6 +11,7 @@ import logger from '../config/logger.js'
  */
 export const login = async (req, response) => {
     try {
+      client.increment("loginAPI")
       logger.info("Login api is triggered")
       const userWithToken = await authService.loginUser(req.body);
       setResponse(response, userWithToken);
@@ -29,6 +31,7 @@ export const login = async (req, response) => {
  */
  export const createUser = async(req, response) => {
     try {
+      client.increment("PostUser")
         logger.info("Create User API is triggered")
         const user = await authService.createUser(req, response);
     } catch (err) {
