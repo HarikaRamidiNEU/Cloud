@@ -6,7 +6,7 @@ import express from 'express';
 const router = express.Router();
 import multer from "multer"
 const upload = multer({ dest: "uploads/" });
-import StatsD from 'node-statsd';
+import StatsD from 'statsd-client';
 
 const client = new StatsD();
 // get Product Route

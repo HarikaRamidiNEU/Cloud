@@ -1,7 +1,7 @@
 import * as authService from "../services/auth-service.js";
 import { setResponse, setError } from "../utils/http-utils.js";
 import logger from '../config/logger.js'
-import StatsD from 'node-statsd';
+import StatsD from 'statsd-client';
 const client = new StatsD();
 /**
  * It logsIn a user and returns the accesstoken in the response
