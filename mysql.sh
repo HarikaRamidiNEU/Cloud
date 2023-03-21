@@ -2,7 +2,7 @@
 
       sudo yum update -y
       sudo yum upgrade -y
-      sudo yum install amazon-cloudwatch-agent
+      sudo yum install amazon-cloudwatch-agent -y
       sudo cp /tmp/amazon-cloudwatch-agent.json /home/ec2-user/
       sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/home/ec2-user/amazon-cloudwatch-agent.json
       sudo amazon-linux-extras install postgresql9.6 -y
