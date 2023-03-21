@@ -1,6 +1,7 @@
 import { hashPassword } from "../config/crypto.js";
 import { isValidEmail } from "../config/validators.js";
 import User from "../models/User.js";
+import logger from '../config/logger.js'
 
 /**
  * This method used to create a new user
@@ -8,12 +9,14 @@ import User from "../models/User.js";
  */
  export const createUser = async (req, res) => {
     const { first_name, last_name, password, username } = req.body;
-    if(!first_name || !last_name || !password || !username || !isValidEmail(username))
+    if(!first_name || !last_name || !password || !username || !isValidEmail(username)){
+        logger.error("Required details are not provided while creating a user");
         res.status(400).send({message: "Bad request"})
+    }
     else{
       const user = await User.findOne({where: {username: username}})
       if(!user){
-        console.log("There is no such user, adding now");
+        logger.info("There is no such user, adding now");
         const hashedPassword = await hashPassword(password);
         req.body.password = hashedPassword;
         const row = await User.create(req.body);
@@ -25,8 +28,10 @@ import User from "../models/User.js";
                     account_created: row.account_created,
                     account_updated: row.account_updated
                 }
+                logger.info(`User with username ${username} has been created successfully`);
                 res.status(201).send(user);
               } else {
+                logger.error("User already exists");
                 res.status(400).send({message: "Bad Request, User already exists!"})
               }
     }

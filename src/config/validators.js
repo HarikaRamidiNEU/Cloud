@@ -1,5 +1,6 @@
 import validator from 'validator';
 import passwordValidator from 'password-validator';
+import logger from 'winston'
 
 /**
  * Validates whether the given value is not null or undefined.
@@ -18,9 +19,12 @@ export const isValid = (value) => {
  * @returns true, if the email is valid.
  */
 export const isValidEmail = (email) => {
+    logger.info("validating the email "+email)
     if (validator.isEmail(email)) {
+        logger.info(email+" is valid");
         return true;
     }
+    logger.info(email+" is invalid");
     return false;
 }
 
