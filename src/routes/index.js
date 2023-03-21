@@ -3,10 +3,13 @@ import authRouter from './auth-router.js';
 import express from 'express';
 import productRouter from './product-router.js';
 import logger from '../config/logger.js'
-const app = express()
+import StatsD from 'node-statsd';
+const app = express();
+const client = new StatsD();
 
 const routes = (app) => {
 app.get('/healthz', (req, res) => {
+  client.increment("healthz");
     logger.info("healthz API is triggered");
     res.status(200).send({
       success: 'true',
