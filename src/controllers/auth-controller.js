@@ -11,7 +11,7 @@ const client = new StatsD();
  */
 export const login = async (req, response) => {
     try {
-      client.increment("loginAPI")
+      client.increment("loginAPI", 1);
       logger.info("Login api is triggered")
       const userWithToken = await authService.loginUser(req.body);
       setResponse(response, userWithToken);
@@ -31,8 +31,8 @@ export const login = async (req, response) => {
  */
  export const createUser = async(req, response) => {
     try {
-      client.increment("PostUser")
-        logger.info("Create User API is triggered")
+      client.increment("PostUser", 1);
+        logger.info("Create User API is triggered");
         const user = await authService.createUser(req, response);
     } catch (err) {
         logger.error(err)

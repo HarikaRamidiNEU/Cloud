@@ -8,7 +8,7 @@ import StatsD from 'statsd-client';
 const client = new StatsD();
 // getUser Route
 router.get('/:id', async (req, res)=> {
-    client.increment("GetUser");
+    client.increment("GetUser", 1);
     const status = await authRoute(req, res);
     if(status === 200)
         userController.getUser(req, res);
@@ -18,7 +18,7 @@ router.get('/:id', async (req, res)=> {
 
 // UpdateProfile Route
 router.put('/:id', async (req, res)=> {
-    client.increment("PutUser");
+    client.increment("PutUser", 1);
     const status = await authRoute(req, res);
     if(status === 200)
         userController.updateProfile(req, res);

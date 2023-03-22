@@ -11,13 +11,13 @@ import StatsD from 'statsd-client';
 const client = new StatsD();
 // get Product Route
 router.get('/:id', async (req, res)=> {
-    client.increment("GetProduct");
+    client.increment("GetProduct", 1);
         productController.getProduct(req, res);
 });
 
 // Create Product with put Route
 router.post('/', async (req, res)=> {
-    client.increment("PostProduct");
+    client.increment("PostProduct", 1);
     const status = await authRoute(req, res);
     if(status === 200)
         productController.createProduct(req, res);
@@ -27,7 +27,7 @@ router.post('/', async (req, res)=> {
 
 // Update Product with put Route
 router.put('/:id', async (req, res)=> {
-    client.increment("PutProduct")
+    client.increment("PutProduct", 1)
     const status = await productRoute(req, res);
     if(status === 200)
         productController.putProduct(req, res);
@@ -37,7 +37,7 @@ router.put('/:id', async (req, res)=> {
 
 // Update Product with patch Route
 router.patch('/:id', async (req, res)=> {
-    client.increment("PatchProduct")
+    client.increment("PatchProduct", 1)
     const status = await productRoute(req, res);
     if(status === 200)
         productController.patchProduct(req, res);
@@ -47,7 +47,7 @@ router.patch('/:id', async (req, res)=> {
 
 // delete Product Route
 router.delete('/:id', async (req, res)=> {
-    client.increment("DeleteProduct")
+    client.increment("DeleteProduct", 1)
     const status = await productRoute(req, res);
     if(status === 200)
         productController.deleteProduct(req, res);
@@ -57,7 +57,7 @@ router.delete('/:id', async (req, res)=> {
 
 // get All Images Route
 router.get('/:id/image', async (req, res)=> {
-    client.increment("GetAllImages")
+    client.increment("GetAllImages", 1)
     const status = await productRoute(req, res);
     if(status === 200)
         s3Controller.getAllImages(req, res);
@@ -67,7 +67,7 @@ router.get('/:id/image', async (req, res)=> {
 
 // get a single Image Route
 router.get('/:id/image/:imageId', async (req, res)=> {
-    client.increment("GetImage")
+    client.increment("GetImage", 1)
     const status = await productRoute(req, res);
     if(status === 200)
         s3Controller.getImage(req, res);
@@ -77,7 +77,7 @@ router.get('/:id/image/:imageId', async (req, res)=> {
 
 // Create Image with post Route
 router.post('/:id/image',upload.single('file'), async (req, res)=> {
-    client.increment("PostImage")
+    client.increment("PostImage", 1)
     const status = await productRoute(req, res);
     if(status === 200)
         s3Controller.uploadImage(req, res);
@@ -87,7 +87,7 @@ router.post('/:id/image',upload.single('file'), async (req, res)=> {
 
 // delete Image Route
 router.delete('/:id/image/:imageId', async (req, res)=> {
-    client.increment("DeleteImage")
+    client.increment("DeleteImage", 1)
     const status = await productRoute(req, res);
     if(status === 200)
         s3Controller.deleteImage(req, res);
