@@ -11,7 +11,7 @@ const client =new StatsD();
 const routes = (app) => {
  
 app.get('/healthz', (req, res) => {
-  client.increment("healthz");
+  client.increment("healthznew",1);
     logger.info("healthz API is triggered");
     res.status(200).send({
       success: 'true',
