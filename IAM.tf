@@ -12,17 +12,6 @@ resource "aws_iam_policy" "WebAppS3" {
           "s3:GetObject",
           "s3:ListBucket",
           "s3:DeleteObject",
-          "s3:GetObjectVersion",
-          "s3:CreateBucket",
-          "s3:DeleteBucket",
-          "s3:DeleteObjectTagging",
-          "s3:GetBucketLocation",
-          "s3:GetBucketTagging",
-          "s3:GetObjectAttributes",
-          "s3:GetObjectTagging",
-          "s3:ListAllMyBuckets",
-          "s3:PutBucketLogging",
-          "s3:PutObjectTagging",
         ]
         Effect = "Allow"
         "Resource" : [
@@ -33,7 +22,6 @@ resource "aws_iam_policy" "WebAppS3" {
     ]
   })
 }
-
 resource "aws_iam_role" "EC2-CSYE6225" {
   name = "EC2-CSYE6225"
 
@@ -60,7 +48,12 @@ resource "aws_iam_policy_attachment" "ec2_policy_role" {
   name       = "ec2attachment"
   roles      = [aws_iam_role.EC2-CSYE6225.name]
   policy_arn = aws_iam_policy.WebAppS3.arn
+}
 
+resource "aws_iam_policy_attachment" "cloudwatch_policy_role" {
+  name       = "cloudWatchattachment"
+  roles      = [aws_iam_role.EC2-CSYE6225.name]
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
 resource "aws_iam_instance_profile" "ec2_profile" {
