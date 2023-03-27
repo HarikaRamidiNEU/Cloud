@@ -2,6 +2,9 @@ import Product from "../models/Product.js";
 import User from "../models/User.js";
 import auth from "basic-auth";
 import logger from "../config/logger.js"
+import StatsD from 'statsd-client'
+
+const client = new StatsD();
 
 /**
  * This method used to create a new product
@@ -22,11 +25,13 @@ export const createProduct = async (req, res) => {
             })
         }
         else {
+            const date = Date.now();
             const product = await Product.findOne({
                 where: {
                     sku: sku
                 }
             })
+            client.timing('getProduct', Date.now() - date);
             if (!product) {
                 logger.info("There is no such product, adding now");
                 const user = await auth(req);
@@ -36,7 +41,9 @@ export const createProduct = async (req, res) => {
                     }
                 });
                 req.body.owner_user_id = dbuser.id;
+                const date = Date.now();
                 const row = await Product.create(req.body);
+                client.timing('createProduct', Date.now() - date);
                 logger.info("Product has been created with id: "+row.id);
                 res.status(201).send(row);
             } else {
@@ -88,9 +95,13 @@ export const putProduct = async (req, res) => {
                     message: "Bad request. Quantity cannot be less than 0 or greater than 100"
                 })
             }
+            const date = Date.now();
             const product = await Product.findByPk(productId);
+            client.timing('getProduct', Date.now() - date);
             if (product) {
-                product.update(req.body);
+                const date = Date.now();
+                const update = await product.update(req.body);
+                client.timing('updateProduct', Date.now() - date);
                 logger.info("Product with productId: "+productId+" updated successfully");
                 res.status(204).send({
                             message: "Product updated successfully"
@@ -135,9 +146,13 @@ export const patchProduct = async (req, res) => {
                     message: "Bad request. Quantity cannot be less than 0 or greater than 100"
                 })
             }
+            const date = Date.now();
             const product = await Product.findByPk(productId);
+            client.timing('getProduct', Date.now() - date);
             if (product) {
-                product.update(req.body);
+                const date = Date.now();
+                const update = await product.update(req.body);
+                client.timing('updateProduct', Date.now() - date);
                 logger.info("Product with productId: "+productId+" updated successfully");
                 res.status(204).send({
                             message: "Product updated successfully"
@@ -161,7 +176,9 @@ export const patchProduct = async (req, res) => {
 export const getProduct = async (req, res) => {
     const productId = req.params.id;
     logger.info("getting the product details from database");
+    const date = Date.now();
     const row = await Product.findByPk(productId);
+    client.timing('getProduct', Date.now() - date);
     logger.info("product details with productId"+productId+"have been retrieved from database");
     res.status(200).json(row);
 };
@@ -178,11 +195,13 @@ export const deleteProduct = async (req, res) => {
         logger.error("productId is null");
         res.status(400).json("Bad Request");
     }
+    const date = Date.now();
     const row = await Product.destroy({
         where: {
             id: productId
         }
     });
+    client.timing('deleteProduct', Date.now() - date);
     if (row === 1){
         logger.info("product with productId "+productId+" has been deleted successfully");
         res.status(204).json(row);
