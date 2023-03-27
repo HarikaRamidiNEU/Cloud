@@ -2,7 +2,9 @@ import { hashPassword } from '../config/crypto.js';
 // import pool from '../config/database.js';
 import User from "../models/User.js";
 import logger from '../config/logger.js'
+import StatsD from 'statsd-client'
 
+const client = new StatsD();
 /**
  * This method used to update the user
  * @param user - user object with the details of user
@@ -19,11 +21,13 @@ export const updateUser = async (req, res) => {
         });
     }
     else{
+        const date = Date.now();
         const results = await User.update(req.body, {
             where: {
               id: userId
             }
           });
+          client.timing('updateUser', Date.now() - date);
           if (results && results !== 0) {
             logger.info("User details of the user with id "+userId+" is updated successfully");
                 res.status(204).send({message: "User updated successfully"});
@@ -44,7 +48,9 @@ export const updateUser = async (req, res) => {
 export const getUser = async (req, res) => {
     const userId = req.params.id;
     logger.info("fetching the user details with id"+userId+" from database");
+    const date = Date.now();
     const row = await User.findByPk(userId);
+    client.timing('getUser', Date.now() - date);
     const user = {
         id: row.id,
         first_name: row.first_name,
