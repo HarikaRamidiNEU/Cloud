@@ -16,6 +16,7 @@ export const uploadFile = async(req, res) => {
             res.status(400).send({
                 message: "Bad request."
             })
+        }
         else {
             const ext = file.originalname.split('.').pop();
             if(!supportedFileTypes.includes(fileType) && ext !== fileType){
