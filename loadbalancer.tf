@@ -33,7 +33,7 @@ resource "aws_autoscaling_group" "asg" {
   desired_capacity          = 1
   health_check_type         = "ELB"
   health_check_grace_period = 300
-  default_cooldown          = 60
+  default_cooldown          = 300
   tag {
     key                 = "Name"
     value               = "web-app"
@@ -77,7 +77,6 @@ resource "aws_autoscaling_policy" "scale_down" {
 
 resource "aws_lb" "application_lb" {
   name_prefix        = "lb-"
-  internal           = true
   load_balancer_type = "application"
   subnets            = [aws_subnet.public_subnets[0].id, aws_subnet.public_subnets[1].id, aws_subnet.public_subnets[2].id]
   security_groups    = [aws_security_group.loadbalancer.id]
@@ -108,15 +107,33 @@ resource "aws_lb_listener" "my_listener" {
   }
 }
 
+resource "aws_lb_listener" "my_listener1" {
+  load_balancer_arn = aws_lb.application_lb.arn
+  port              = 443
+  protocol          = "HTTPS"
+
+  default_action {
+    target_group_arn = aws_lb_target_group.target_group.arn
+    type             = "forward"
+  }
+}
+
 # Attach Target Group to Auto Scaling Group
 resource "aws_autoscaling_attachment" "asg_attachment" {
   autoscaling_group_name = aws_autoscaling_group.asg.name
   alb_target_group_arn   = aws_lb_target_group.target_group.arn
 }
 
+data "aws_instance" "ec2_instance_ids" {
+  filter {
+    name   = "tag:Name"
+    values = ["web-app"]
+  }
+}
+
 # Register Auto Scaling Group instances with Target Group
 resource "aws_lb_target_group_attachment" "target_group_attachment" {
   target_group_arn = aws_lb_target_group.target_group.arn
-  target_id        = aws_instance.application-ec2.id
+  target_id        = data.aws_instance.ec2_instance_ids.id
   port             = "8080"
 }
