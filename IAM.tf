@@ -33,37 +33,15 @@ resource "aws_iam_policy" "EC2-lb" {
     Statement = [
       {
         Action = [
-          "ec2:RunInstances",
-          "ec2:DescribeInstances",
-          "ec2:StopInstances",
-          "ec2:TerminateInstances",
-          "ec2:AttachInstances",
-          "ec2:DetachInstances",
           "autoscaling:CreateAutoScalingGroup",
-          "autoscaling:DescribeAutoScalingGroups",
           "autoscaling:UpdateAutoScalingGroup",
-          "autoscaling:CreateLaunchConfiguration",
-          "autoscaling:DescribeLaunchConfigurations",
           "autoscaling:CreateLaunchTemplate",
-          "autoscaling:DescribeLaunchTemplates",
           "autoscaling:PutScalingPolicy",
-          "autoscaling:DescribeScalingPolicies",
           "autoscaling:DeleteAutoScalingGroup",
-          "autoscaling:DeleteLaunchConfiguration",
           "autoscaling:DeleteLaunchTemplate",
           "autoscaling:DeletePolicy",
-          "cloudwatch:PutMetricData",
-          "cloudwatch:GetMetricData",
           "cloudwatch:DescribeAlarms",
           "cloudwatch:DeleteAlarms",
-          "ec2:DescribeTags",
-          "ec2:DescribeInstanceAttribute",
-          "ec2:DescribeInstances",
-          "ec2:DescribeRegions",
-          "ec2:DescribeSecurityGroups",
-          "ec2:DescribeVpcs",
-          "ec2:DescribeSubnets",
-          "ec2:DescribeRouteTables"
         ]
         Effect = "Allow"
         "Resource" : "*"
