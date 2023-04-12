@@ -111,7 +111,7 @@ build {
     source      = "./appservice.service"
   }
 
-   provisioner "file" {
+  provisioner "file" {
     destination = "/tmp/"
     source      = "./amazon-cloudwatch-agent.json"
   }
@@ -128,7 +128,8 @@ build {
 
     custom_data = {
 
-    my_custom_data = "example"
+      my_custom_data = "example"
 
-}
+    }
+  }
 }
