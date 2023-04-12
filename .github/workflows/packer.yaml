@@ -2,7 +2,7 @@ name: Packer config
 
 on:
   push:
-    branches: ["main"]
+    branches: ["assignment9"]
 
 jobs:
   packer:
@@ -95,3 +95,9 @@ jobs:
 
       - name: passing the ami id
         run: echo "AMI_ID=$(jq -r '.builds[0].artifact_id' manifest.json | cut -d ":" -f2)" >> $GITHUB_ENV
+
+      - name: create new instance
+        run: aws ec2 create-launch-template-version --launch-template-name myLaunchTemplate --version-description WebVersion2 --source-version 1 --launch-template-data '{"ImageId":"${{ env.AMI_ID }}"}'
+
+      - name: autoscaling instance refresh
+        run: aws autoscaling start-instance-refresh --auto-scaling-group-name myASG --strategy Rolling --desired-configuration '{"LaunchTemplate":{"LaunchTemplateName":"myLaunchTemplate","Version":"$Latest"}}'
