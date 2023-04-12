@@ -42,6 +42,13 @@ resource "aws_iam_policy" "EC2-lb" {
           "autoscaling:DeletePolicy",
           "cloudwatch:DescribeAlarms",
           "cloudwatch:DeleteAlarms",
+           "kms:Encrypt",
+        "kms:Decrypt",
+        "kms:ReEncrypt*",
+        "kms:GenerateDataKey*",
+        "kms:CreateGrant",
+        "kms:ListGrants",
+        "kms:DescribeKey"
         ]
         Effect = "Allow"
         "Resource" : "*"
@@ -70,7 +77,6 @@ resource "aws_iam_role" "EC2-CSYE6225" {
     Name = "EC2-CSYE6225"
   }
 }
-
 resource "aws_iam_policy_attachment" "ec2_policy_role" {
   name       = "ec2attachment"
   roles      = [aws_iam_role.EC2-CSYE6225.name]
@@ -92,4 +98,11 @@ resource "aws_iam_policy_attachment" "elb_policy_role" {
 resource "aws_iam_instance_profile" "ec2_profile" {
   name = "ec2_profile"
   role = aws_iam_role.EC2-CSYE6225.name
+}
+
+resource "aws_kms_grant" "a" {
+  name              = "my-grant"
+  key_id            = aws_kms_key.ebs_key.key_id
+  grantee_principal = aws_iam_role.EC2-CSYE6225.arn
+  operations        = ["Encrypt", "Decrypt", "GenerateDataKey"]
 }

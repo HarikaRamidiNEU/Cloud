@@ -25,6 +25,8 @@ resource "aws_db_instance" "databaseInstance" {
   publicly_accessible  = false
   skip_final_snapshot  = true
   multi_az             = false
+  kms_key_id           = aws_kms_key.rds_key.arn
+  storage_encrypted    = true
   vpc_security_group_ids = [
     aws_security_group.database.id,
   ]

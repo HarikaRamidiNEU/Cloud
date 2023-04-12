@@ -16,11 +16,23 @@ chmod -R 777 /home/ec2-user/
 
 EOF
 }
+
 resource "aws_launch_template" "asg_launch_config" {
+  name          = "myLaunchTemplate"
   image_id      = var.my_ami
   instance_type = "t2.micro"
   key_name      = var.aws_key_pair
-  user_data     = base64encode(data.template_file.user_data.rendered)
+  block_device_mappings {
+    device_name = "/dev/xvda"
+    ebs {
+      kms_key_id = aws_kms_key.ebs_key.arn
+      delete_on_termination = true
+      encrypted = true
+      volume_size = 50
+      volume_type = "gp2"
+    }
+  }
+  user_data = base64encode(data.template_file.user_data.rendered)
   iam_instance_profile {
     name = aws_iam_instance_profile.ec2_profile.name
   }
@@ -52,20 +64,6 @@ resource "aws_autoscaling_group" "asg" {
 
 }
 
-# resource "aws_autoscaling_policy" "scale_up" {
-#   name                   = "scale-up-policy"
-#   autoscaling_group_name = aws_autoscaling_group.asg.name
-#   adjustment_type        = "ChangeInCapacity"
-#   policy_type            = "TargetTrackingScaling"
-
-#   target_tracking_configuration {
-#     predefined_metric_specification {
-#       predefined_metric_type = "ASGAverageCPUUtilization"
-#     }
-#     target_value = 3.0
-#   }
-# }
-
 resource "aws_lb" "application_lb" {
   name_prefix        = "lb-"
   load_balancer_type = "application"
@@ -89,8 +87,9 @@ resource "aws_lb_target_group" "target_group" {
 
 resource "aws_lb_listener" "my_listener" {
   load_balancer_arn = aws_lb.application_lb.arn
-  port              = 80
-  protocol          = "HTTP"
+  port              = 443
+  protocol          = "HTTPS"
+  certificate_arn = var.certificate_arn
 
   default_action {
     target_group_arn = aws_lb_target_group.target_group.arn

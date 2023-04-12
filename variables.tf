@@ -57,7 +57,6 @@ variable "my_ami" {
   type        = string
   description = "The ami which is created with all the configuration"
 }
-
 variable "ec2_instance_type" {
   type        = string
   description = "EC2 instance type"
@@ -91,4 +90,9 @@ variable "route53RecordName" {
 variable "hostedZoneID" {
   type        = string
   description = "Route 53 hosted zone id"
+}
+
+variable "certificate_arn" {
+  type        = string
+  description = "ssl certificate arn"
 }
