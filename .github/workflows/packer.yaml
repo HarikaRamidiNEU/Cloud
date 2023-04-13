@@ -2,7 +2,7 @@ name: Packer config
 
 on:
   push:
-    branches: ["assignment9"]
+    branches: ["Main"]
 
 jobs:
   packer:
