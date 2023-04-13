@@ -25,11 +25,11 @@ resource "aws_launch_template" "asg_launch_config" {
   block_device_mappings {
     device_name = "/dev/xvda"
     ebs {
-      kms_key_id = aws_kms_key.ebs_key.arn
+      kms_key_id            = aws_kms_key.ebs_key.arn
       delete_on_termination = true
-      encrypted = true
-      volume_size = 50
-      volume_type = "gp2"
+      encrypted             = true
+      volume_size           = 50
+      volume_type           = "gp2"
     }
   }
   user_data = base64encode(data.template_file.user_data.rendered)
@@ -89,7 +89,7 @@ resource "aws_lb_listener" "my_listener" {
   load_balancer_arn = aws_lb.application_lb.arn
   port              = 443
   protocol          = "HTTPS"
-  certificate_arn = var.certificate_arn
+  certificate_arn   = var.certificate_arn
 
   default_action {
     target_group_arn = aws_lb_target_group.target_group.arn

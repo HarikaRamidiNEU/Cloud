@@ -55,4 +55,9 @@ destroy the config:
 
     terraform destroy -var-file="dev.tfvars" (create a file with .tfvars extension and pass the values)
 
+Importing the certificate to AWS with CLI:
+aws acm import-certificate --certificate fileb://Certificate.pem \
+      --certificate-chain fileb://CertificateChain.pem \
+      --private-key fileb://PrivateKey.pem 	
+
 

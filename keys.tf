@@ -7,26 +7,26 @@ resource "aws_kms_key" "ebs_key" {
     Id      = "kms-key-for-ebs"
     Statement = [
       {
-        Sid       = "Enable IAM User Permissions"
-        Effect    = "Allow"
+        Sid    = "Enable IAM User Permissions"
+        Effect = "Allow"
         Principal = {
           AWS = [
             "${join("", ["arn:aws:iam::", data.aws_caller_identity.current.account_id, ":root"])}",
             "${join("", ["arn:aws:iam::", data.aws_caller_identity.current.account_id, ":role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"])}",
           ]
         }
-        Action    = "kms:*"
-        Resource  = "*"
+        Action   = "kms:*"
+        Resource = "*"
       },
       {
-        Sid       = "Allow access for Key Administrators"
-        Effect    = "Allow"
+        Sid    = "Allow access for Key Administrators"
+        Effect = "Allow"
         Principal = {
           AWS = [
             "${join("", ["arn:aws:iam::", data.aws_caller_identity.current.account_id, ":role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"])}",
           ]
         }
-        Action    = [
+        Action = [
           "kms:Create*",
           "kms:Describe*",
           "kms:Enable*",
@@ -42,7 +42,7 @@ resource "aws_kms_key" "ebs_key" {
           "kms:ScheduleKeyDeletion",
           "kms:CancelKeyDeletion",
         ]
-        Resource  = "*"
+        Resource = "*"
       },
     ]
   })
@@ -56,17 +56,17 @@ resource "aws_kms_key" "rds_key" {
     Id      = "kms-key-for-rds"
     Statement = [
       {
-        Sid       = "Enable IAM User Permissions"
-        Effect    = "Allow"
+        Sid    = "Enable IAM User Permissions"
+        Effect = "Allow"
         Principal = {
           AWS = "${join("", ["arn:aws:iam::", data.aws_caller_identity.current.account_id, ":root"])}"
         }
-        Action    = "kms:*"
-        Resource  = "*"
+        Action   = "kms:*"
+        Resource = "*"
       },
       {
-        Sid       = "Allow access for Key Administrators"
-        Effect    = "Allow"
+        Sid    = "Allow access for Key Administrators"
+        Effect = "Allow"
         Principal = {
           AWS = "${join("", ["arn:aws:iam::", data.aws_caller_identity.current.account_id, ":role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"])}"
         }

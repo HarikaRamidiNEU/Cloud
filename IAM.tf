@@ -42,13 +42,13 @@ resource "aws_iam_policy" "EC2-lb" {
           "autoscaling:DeletePolicy",
           "cloudwatch:DescribeAlarms",
           "cloudwatch:DeleteAlarms",
-           "kms:Encrypt",
-        "kms:Decrypt",
-        "kms:ReEncrypt*",
-        "kms:GenerateDataKey*",
-        "kms:CreateGrant",
-        "kms:ListGrants",
-        "kms:DescribeKey"
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*",
+          "kms:CreateGrant",
+          "kms:ListGrants",
+          "kms:DescribeKey"
         ]
         Effect = "Allow"
         "Resource" : "*"
