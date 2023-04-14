@@ -11,8 +11,8 @@ resource "aws_kms_key" "ebs_key" {
         Effect = "Allow"
         Principal = {
           AWS = [
-            "${join("", ["arn:aws:iam::", data.aws_caller_identity.current.account_id, ":root"])}",
-            "${join("", ["arn:aws:iam::", data.aws_caller_identity.current.account_id, ":role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"])}",
+            "${join("", ["arn:aws:iam::", var.account_id, ":root"])}",
+            "${join("", ["arn:aws:iam::", var.account_id, ":role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"])}",
           ]
         }
         Action   = "kms:*"
@@ -23,7 +23,7 @@ resource "aws_kms_key" "ebs_key" {
         Effect = "Allow"
         Principal = {
           AWS = [
-            "${join("", ["arn:aws:iam::", data.aws_caller_identity.current.account_id, ":role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"])}",
+            "${join("", ["arn:aws:iam::", var.account_id, ":role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"])}",
           ]
         }
         Action = [
@@ -59,7 +59,7 @@ resource "aws_kms_key" "rds_key" {
         Sid    = "Enable IAM User Permissions"
         Effect = "Allow"
         Principal = {
-          AWS = "${join("", ["arn:aws:iam::", data.aws_caller_identity.current.account_id, ":root"])}"
+          AWS = "${join("", ["arn:aws:iam::", var.account_id, ":root"])}"
         }
         Action   = "kms:*"
         Resource = "*"
@@ -68,8 +68,10 @@ resource "aws_kms_key" "rds_key" {
         Sid    = "Allow access for Key Administrators"
         Effect = "Allow"
         Principal = {
-          AWS = "${join("", ["arn:aws:iam::", data.aws_caller_identity.current.account_id, ":role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"])}"
+          AWS = "${join("", ["arn:aws:iam::", var.account_id, ":role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"])}"
         }
+        Action   = "kms:*"
+        Resource = "*"
       },
     ]
   })

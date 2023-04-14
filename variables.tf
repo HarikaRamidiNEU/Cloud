@@ -96,3 +96,8 @@ variable "certificate_arn" {
   type        = string
   description = "ssl certificate arn"
 }
+
+variable "account_id" {
+  type        = string
+  description = "account id"
+}

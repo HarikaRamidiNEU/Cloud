@@ -2,6 +2,9 @@ data "template_file" "user_data" {
   template = <<EOF
 #!/bin/bash
 yum update -y
+sudo yum install amazon-cloudwatch-agent -y
+sudo cp /tmp/amazon-cloudwatch-agent.json /home/ec2-user/
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/home/ec2-user/amazon-cloudwatch-agent.json
 cd /home/ec2-user/src/
 touch .env
 echo DATABASE_USER=csye6225 >> .env
@@ -36,7 +39,10 @@ resource "aws_launch_template" "asg_launch_config" {
   iam_instance_profile {
     name = aws_iam_instance_profile.ec2_profile.name
   }
-  vpc_security_group_ids = [aws_security_group.application.id]
+  network_interfaces {
+    associate_public_ip_address = true
+    security_groups             = [aws_security_group.application.id]
+  }
 }
 
 resource "aws_autoscaling_group" "asg" {
