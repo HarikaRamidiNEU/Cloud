@@ -41,7 +41,7 @@ resource "aws_launch_template" "asg_launch_config" {
   }
   network_interfaces {
     associate_public_ip_address = true
-    security_groups = [aws_security_group.application.id]
+    security_groups             = [aws_security_group.application.id]
   }
 }
 

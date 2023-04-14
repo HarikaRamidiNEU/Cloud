@@ -70,8 +70,8 @@ resource "aws_kms_key" "rds_key" {
         Principal = {
           AWS = "${join("", ["arn:aws:iam::", var.account_id, ":role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"])}"
         }
-         Action   = "kms:*"
-         Resource = "*"
+        Action   = "kms:*"
+        Resource = "*"
       },
     ]
   })
