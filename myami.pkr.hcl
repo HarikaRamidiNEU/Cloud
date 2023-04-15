@@ -17,12 +17,12 @@
 # https://www.packer.io/docs/templates/hcl_templates/variables#type-constraints for more info.
 variable "aws_access_key" {
   type    = string
-  default = "AKIAQTWWFZ34QMX46PU4"
+  default = "AKDFGFVBHJ56MX46PU4"
 }
 
 variable "aws_secret_key" {
   type    = string
-  default = "1BjUFnUBPsUS1CKjWS8M2V+MyG4lloK00WinJ03Z"
+  default = "1BjUFniutfgh7yuj91CKjWS8M2V+MyG4lloK00WinJ03Z"
 }
 
 variable "aws_region" {
@@ -37,12 +37,12 @@ variable "aws_source_ami" {
 
 variable "devAccountID" {
   type    = string
-  default = "042325102329" # Dev Account ID
+  default = "04232342302329" # Dev Account ID
 }
 
 variable "demoAccountID" {
   type    = string
-  default = "969027623663" # Demo Account ID
+  default = "96923234623663" # Demo Account ID
 }
 
 variable "ssh_username" {
