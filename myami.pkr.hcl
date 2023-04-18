@@ -17,12 +17,12 @@
 # https://www.packer.io/docs/templates/hcl_templates/variables#type-constraints for more info.
 variable "aws_access_key" {
   type    = string
-  default = "AKDFGFVBHJ56MX46PU4"
+  default = ""
 }
 
 variable "aws_secret_key" {
   type    = string
-  default = "1BjUFniutfgh7yuj91CKjWS8M2V+MyG4lloK00WinJ03Z"
+  default = ""
 }
 
 variable "aws_region" {
